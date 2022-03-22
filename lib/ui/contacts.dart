@@ -18,7 +18,7 @@ class Contacts extends StatelessWidget {
       "country": "India"
     },
     {
-      "name": "Yeo Merrill",
+      "name": "Aeo Merrill",
       "phone": "1-332-774-4832",
       "email": "lectus.pede@hotmail.ca",
       "region": "Warwickshire",
@@ -103,7 +103,7 @@ class Contacts extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
               child: TextField(
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15)),
@@ -116,69 +116,78 @@ class Contacts extends StatelessWidget {
           ),
         ),
         body: SafeArea(
-          child: ListView(controller: _scrollController, children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Seleccionados',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          child: ListView(
+            controller: _scrollController,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Contacts',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Contacts',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-            ),
-            GroupedListView<Map<String, String>, String>(
+              GroupedListView<Map<String, String>, String>(
                 shrinkWrap: true,
                 elements: data,
                 groupBy: (element) =>
                     element['name'].toString().substring(0, 1),
                 groupSeparatorBuilder: (String groupByValue) => SizedBox(
-                      width: /*MediaQuery.of(context).size.width*/100,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          groupByValue.substring(0, 1),
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                      ),
+                  width: /* MediaQuery.of(context).size.width */ double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      groupByValue.substring(0, 1),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 18),
                     ),
-                
+                  ),
+                ),
                 itemBuilder: (context, Map<String, String> element) {
                   return Column(
-                  children: [
-                    ListTile(
-                      onTap: null,
-                          leading: const CircleAvatar(
-                            radius: 25,
-                            backgroundImage: AssetImage('assets/person1.jpg'),
-                          ),
-                          title: Text(
-                            '${element['name']}',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text('${element['phone']}'),
-                          trailing:
-                          const IconButton(onPressed: null, icon: Icon(Icons.more_horiz),),),
-                          const Divider(
-                      indent: 25,
-                      thickness: 2,
-                          )
-                ],
-                );
+                    children: [
+                      ListTile(
+                        onTap: null,
+                        leading: const CircleAvatar(
+                          radius: 25,
+                          backgroundImage: AssetImage('../assets/person1.jpg'),
+                        ),
+                        title: Text(
+                          '${element['name']}',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text('${element['phone']}'),
+                        trailing: const IconButton(
+                          onPressed: null,
+                          icon: Icon(Icons.more_horiz),
+                        ),
+                      ),
+                      const Divider(
+                        indent: 25,
+                        thickness: 2,
+                      )
+                    ],
+                  );
                 },
-            ),
-          ])
+                itemComparator: (item1, item2) =>
+                    item1['name']!.compareTo(item2['name']!), // optional
+                useStickyGroupSeparators: true, // optional
+                floatingHeader: true, // optional
+                order: GroupedListOrder.ASC, // optional
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: const FloatingActionButton(
+          backgroundColor: Color(0xff1A4ADA),
+          onPressed: null,
+          child: Icon(Icons.add),
         ),
       ),
     );
   }
-}
+} //class
 
 class Contact {
   Contact({
