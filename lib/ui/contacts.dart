@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 void main() {
   runApp(Contacts());
@@ -8,7 +9,7 @@ class Contacts extends StatelessWidget {
   Contacts({Key? key}) : super(key: key);
   final ScrollController _scrollController = ScrollController();
 
-  final List<Map<String,String>>data =[
+  final List<Map<String, String>> data = [
     {
       "name": "Zahir Ballard",
       "phone": "1-531-990-0526",
@@ -78,7 +79,8 @@ class Contacts extends StatelessWidget {
       "email": "sem@hotmail.edu",
       "region": "Maranhão",
       "country": "Mexico"
-    }];
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -96,23 +98,116 @@ class Contacts extends StatelessWidget {
           centerTitle: true,
           title: const Text('Contacts'),
           elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 5),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15)),
-                hintText: 'Search by name or number',
-                prefixIcon: const Icon(Icons.search)
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+              child: TextField(
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    hintText: 'Buscar contacto',
+                    prefixIcon: const Icon(Icons.search),
+                    fillColor: Colors.white,
+                    filled: true),
+              ),
+            ),
           ),
-          ),),),),
-        
-        body: const Center(
-          child: Text('Hello World'),
+        ),
+        body: SafeArea(
+          child: ListView(controller: _scrollController, children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Seleccionados',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Contacts',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+            GroupedListView<Map<String, String>, String>(
+                shrinkWrap: true,
+                elements: data,
+                groupBy: (element) =>
+                    element['name'].toString().substring(0, 1),
+                groupSeparatorBuilder: (String groupByValue) => SizedBox(
+                      width: /*MediaQuery.of(context).size.width*/100,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          groupByValue.substring(0, 1),
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                
+                itemBuilder: (context, Map<String, String> element) {
+                  return Column(
+                  children: [
+                    ListTile(
+                      onTap: null,
+                          leading: const CircleAvatar(
+                            radius: 25,
+                            backgroundImage: AssetImage('assets/person1.jpg'),
+                          ),
+                          title: Text(
+                            '${element['name']}',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text('${element['phone']}'),
+                          trailing:
+                          const IconButton(onPressed: null, icon: Icon(Icons.more_horiz),),),
+                          const Divider(
+                      indent: 25,
+                      thickness: 2,
+                          )
+                ],
+                );
+                },
+            ),
+          ])
         ),
       ),
     );
   }
+}
+
+class Contact {
+  Contact({
+    required this.name,
+    required this.phone,
+    required this.email,
+    required this.region,
+    required this.country,
+  });
+
+  String name;
+  String phone;
+  String email;
+  String region;
+  String country;
+
+  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
+        name: json["name"],
+        phone: json["phone"],
+        email: json["email"],
+        region: json["region"],
+        country: json["country"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "phone": phone,
+        "email": email,
+        "region": region,
+        "country": country,
+      };
 }
