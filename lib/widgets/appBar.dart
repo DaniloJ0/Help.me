@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget customAppBar() {
   return Row(
@@ -13,7 +14,7 @@ Widget appBar() {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
-          onTap: () => null,
+          onTap: () => Get.back(),
           child: const Icon(
             Icons.arrow_back,
             color: Colors.black,

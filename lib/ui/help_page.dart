@@ -1,3 +1,6 @@
+import 'package:apphelpme/ui/app_info_page.dart';
+import 'package:apphelpme/ui/contactenos_page.dart';
+import 'package:apphelpme/ui/help_center_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,12 +12,13 @@ class HelpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Scaffold(
+      body: SafeArea(child: Column(children: [
       customAppBar(),
       Expanded(
         child: ListMenu()
         )
-      ]);
+      ])));
   }
 }
 
@@ -26,21 +30,27 @@ Widget ListMenu() {
           title: textos('Centro de ayuda', 17.0, FontWeight.w500),
           subtitle: textos(
               'Números de emergencia', 14.0, FontWeight.w400),
-              onTap: ()=> (){},
+              onTap: ()=> Get.to(() => HelpCenterPage(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450)),
               ),
       ListTile(
           leading: icons('herContact'),
           title: textos('Contactenos', 17.0, FontWeight.w500),
           subtitle: textos('Utilice estos medios para comunicarse con nosotros', 14.0,
               FontWeight.w400),
-              onTap: ()=> (){}
+              onTap: ()=> Get.to(() => ContatenosPage(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))
               ),
       ListTile(
         leading: icons('info'),
         title: textos('App info', 17.0, FontWeight.w500),
         subtitle: textos(
             'Versión, creadores', 14.0, FontWeight.w400),
-              onTap: ()=> (){}
+              onTap: ()=> Get.to(() => AppInfoPage(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))
       )]
     );
 }

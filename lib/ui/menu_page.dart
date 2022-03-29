@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../widgets/listItems.dart';
+import 'help_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -32,45 +32,52 @@ class MenuPage extends StatelessWidget {
   }
 }
 
-Widget ListMenu() {
-  return ListView(
-    children: [
-      ListTile(
+// class ListMenu extends StatelessWidget {
+//   const ListMenu({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+  Widget ListMenu(){
+    return ListView(
+      children: [
+        ListTile(
           leading: icons('contact'),
           title: textos('Usuario', 17.0, FontWeight.w500),
           subtitle: textos(
               'Editar nombre, cambiar foto de perfil', 14.0, FontWeight.w400),
-              onTap: ()=> (){},
-              ),
-      ListTile(
-          leading: icons('herCoNtact'),
-          title: textos('Contactos', 17.0, FontWeight.w500),
-          subtitle: textos('Editar lista de contactos, mostrar lista', 14.0,
-              FontWeight.w400),
-              onTap: ()=> (){}
-              ),
-      ListTile(
-        leading: icons('editMessage'),
-        title: textos('Personalizar mensaje de alerta', 17.0, FontWeight.w500),
-        subtitle: textos(
-            'Editar mensaje, editar notificaciones', 14.0, FontWeight.w400),
-              onTap: ()=> (){}
-      ),
-      ListTile(
-          leading: icons('terminos'),
-          title: textos('Térrminos y condiciones', 17.0, FontWeight.w500),
-          subtitle: textos(
-              'Terminos y politica de privacidad', 14.0, FontWeight.w400),
-              onTap: ()=> (){}),
-      ListTile(
-          leading: icons('ayuda'),
-          title: textos('Ayuda', 17.0, FontWeight.w500),
-          subtitle: textos(
-              'Centro de ayuda, contactenos, app info', 14.0, FontWeight.w400),
-              onTap: ()=> (){}),
-    ],
-  );
-}
+          onTap: () => () {},
+        ),
+        ListTile(
+            leading: icons('herCoNtact'),
+            title: textos('Contactos', 17.0, FontWeight.w500),
+            subtitle: textos('Editar lista de contactos, mostrar lista', 14.0,
+                FontWeight.w400),
+            onTap: () => () {}),
+        ListTile(
+            leading: icons('editMessage'),
+            title:
+                textos('Personalizar mensaje de alerta', 17.0, FontWeight.w500),
+            subtitle: textos(
+                'Editar mensaje, editar notificaciones', 14.0, FontWeight.w400),
+            onTap: () => () {}),
+        ListTile(
+            leading: icons('terminos'),
+            title: textos('Térrminos y condiciones', 17.0, FontWeight.w500),
+            subtitle: textos(
+                'Terminos y politica de privacidad', 14.0, FontWeight.w400),
+            onTap: () => () {}),
+        ListTile(
+            leading: icons('ayuda'),
+            title: textos('Ayuda', 17.0, FontWeight.w500),
+            subtitle: textos('Centro de ayuda, contactenos, app info', 14.0,
+                FontWeight.w400),
+            onTap: () => Get.to(() => HelpPage(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))
+                ),
+      ],
+    );
+  }
+
 
 Widget customAppBar() {
   return Row(
@@ -142,4 +149,3 @@ Widget headBar() {
     ],
   );
 }
-

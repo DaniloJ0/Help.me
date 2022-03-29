@@ -5,7 +5,7 @@ Widget textos(text, fontSz, FontW) {
       style: TextStyle(
           fontSize: fontSz,
           fontFamily: 'Abhaya Libre SemiBold',
-          fontWeight: FontWeight.w400));
+          fontWeight: FontW));
 }
 
 Widget icons(name) {
