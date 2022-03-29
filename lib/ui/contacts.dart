@@ -1,222 +1,86 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:grouped_list/grouped_list.dart';
 
-void main() {
-  runApp(Contacts());
+import '../../domain/models/human.dart';
+
+class Contacts extends StatefulWidget {
+  Contacts({Key? key}) : super(key: key);
+
+  @override
+  _ContactsState createState() => _ContactsState();
 }
 
-class Contacts extends StatelessWidget {
-  Contacts({Key? key}) : super(key: key);
-  final ScrollController _scrollController = ScrollController();
+class _ContactsState extends State<Contacts> {
+  int counter = 0;
+  List<Human> entries = <Human>[Human('Cristian Duran','3025456458')];
 
-  final List<Map<String, String>> data = [
-    {
-      "name": "Zahir Ballard",
-      "phone": "1-531-990-0526",
-      "email": "ornare.libero@hotmail.com",
-      "region": "Valle d'Aosta",
-      "country": "India"
-    },
-    {
-      "name": "Aeo Merrill",
-      "phone": "1-332-774-4832",
-      "email": "lectus.pede@hotmail.ca",
-      "region": "Warwickshire",
-      "country": "United States"
-    },
-    {
-      "name": "Jeanette Collier",
-      "phone": "(322) 372-8789",
-      "email": "lacus.ut@protonmail.net",
-      "region": "Samsun",
-      "country": "Germany"
-    },
-    {
-      "name": "Abraham Carrillo",
-      "phone": "(877) 399-1647",
-      "email": "urna.nec@icloud.ca",
-      "region": "Ivanovo Oblast",
-      "country": "China"
-    },
-    {
-      "name": "Kiona Lowery",
-      "phone": "1-275-555-4573",
-      "email": "magna.duis@icloud.net",
-      "region": "Ankara",
-      "country": "Pakistan"
-    },
-    {
-      "name": "Thaddeus Curry",
-      "phone": "(944) 256-2684",
-      "email": "massa.mauris.vestibulum@outlook.org",
-      "region": "Henegouwen",
-      "country": "Colombia"
-    },
-    {
-      "name": "Lucian Perry",
-      "phone": "1-263-978-3556",
-      "email": "vitae@aol.com",
-      "region": "Tasmania",
-      "country": "Brazil"
-    },
-    {
-      "name": "Yuri Gaines",
-      "phone": "1-220-445-1914",
-      "email": "vitae.diam.proin@outlook.edu",
-      "region": "Maine",
-      "country": "Peru"
-    },
-    {
-      "name": "Ronan Farmer",
-      "phone": "(477) 560-7527",
-      "email": "ac@google.net",
-      "region": "Galicia",
-      "country": "Canada"
-    },
-    {
-      "name": "Tad Potts",
-      "phone": "1-881-467-8342",
-      "email": "sem@hotmail.edu",
-      "region": "Maranhão",
-      "country": "Mexico"
-    }
-  ];
+  void onPressed() {
+    setState(() {
+      entries.add(Human(faker.person.name(),
+          (faker.randomGenerator.decimal(min: 3000000000,scale: 115654945).floor()).toString()));
+      counter = entries.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: dead_code
     return MaterialApp(
-      title: 'Contactos',
-      theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.light,
-        primaryColor: Colors.red,
-        fontFamily: 'Arial',
-      ),
       home: Scaffold(
         appBar: AppBar(
+          title: Text('Contactos de Emergencia'),
           backgroundColor: const Color.fromARGB(255, 245, 10, 10),
           centerTitle: true,
-          title: const Text('Contacts'),
-          elevation: 0,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(70),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    hintText: 'Buscar contacto',
-                    prefixIcon: const Icon(Icons.search),
-                    fillColor: Colors.white,
-                    filled: true),
-              ),
-            ),
-          ),
         ),
-        body: SafeArea(
-          child: ListView(
-            controller: _scrollController,
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Contacts',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ),
-              GroupedListView<Map<String, String>, String>(
-                shrinkWrap: true,
-                elements: data,
-                groupBy: (element) =>
-                    element['name'].toString().substring(0, 1),
-                groupSeparatorBuilder: (String groupByValue) => SizedBox(
-                  width: /* MediaQuery.of(context).size.width */ double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      groupByValue.substring(0, 1),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                  ),
-                ),
-                itemBuilder: (context, Map<String, String> element) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        onTap: null,
-                        leading: const CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage('../assets/person1.jpg'),
-                        ),
-                        title: Text(
-                          '${element['name']}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text('${element['phone']}'),
-                        trailing: const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.more_horiz),
-                        ),
-                      ),
-                      const Divider(
-                        indent: 25,
-                        thickness: 2,
-                      )
-                    ],
-                  );
-                },
-                itemComparator: (item1, item2) =>
-                    item1['name']!.compareTo(item2['name']!), // optional
-                useStickyGroupSeparators: true, // optional
-                floatingHeader: true, // optional
-                order: GroupedListOrder.ASC, // optional
-              ),
-            ],
-          ),
+        body: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: entries.length,
+          itemBuilder: (context, index) {
+            return _row(entries[index], index);
+          },
         ),
-        floatingActionButton: const FloatingActionButton(
-          backgroundColor: Color(0xff1A4ADA),
-          onPressed: null,
-          child: Icon(Icons.add),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => setState(() => {onPressed()}),
+          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+          tooltip: 'Añadir Contacto',
+          child: const Icon(Icons.add),
         ),
       ),
     );
   }
-} //class
 
-class Contact {
-  Contact({
-    required this.name,
-    required this.phone,
-    required this.email,
-    required this.region,
-    required this.country,
-  });
+  Widget _row(Human human, int index) {
+    return Dismissible(
+        key: UniqueKey(),
+        background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                "Deleting",
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
+        child: _card(human),
+        onDismissed: (direction) {
+          // Remove the item from the data source.
+          setState(() {
+            entries.remove(human);
+          });
+        });
+  }
 
-  String name;
-  String phone;
-  String email;
-  String region;
-  String country;
-
-  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
-        name: json["name"],
-        phone: json["phone"],
-        email: json["email"],
-        region: json["region"],
-        country: json["country"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "phone": phone,
-        "email": email,
-        "region": region,
-        "country": country,
-      };
+  Widget _card(Human human) {
+    return Card(
+      margin: EdgeInsets.all(4.0),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(10.0),
+        leading: Icon(Icons.contacts),
+        title: Text(human.name),
+        subtitle: Text(human.email),
+        isThreeLine: true,
+      ),
+    );
+  }
 }
