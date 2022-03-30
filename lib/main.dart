@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:apphelpme/ui/contacts.dart';
+import 'package:apphelpme/ui/message.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,10 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: SimpleList(),
-      //home: ListBuilder()
-      //home: DynamicList(),
-      home: Contacts(),
+      home: Message(),
+      //home: Contacts(),
     );
   }
 }

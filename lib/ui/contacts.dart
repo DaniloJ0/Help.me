@@ -24,11 +24,10 @@ class _ContactsState extends State<Contacts> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: dead_code
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Contactos de Emergencia'),
+          title: const Text('Contactos de Emergencia'),
           backgroundColor: const Color.fromARGB(255, 245, 10, 10),
           centerTitle: true,
         ),
@@ -55,7 +54,7 @@ class _ContactsState extends State<Contacts> {
         background: Container(
             color: Colors.red,
             alignment: Alignment.centerLeft,
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(
                 "Deleting",
@@ -73,9 +72,9 @@ class _ContactsState extends State<Contacts> {
 
   Widget _card(Human human) {
     return Card(
-      margin: EdgeInsets.all(4.0),
+      margin: const EdgeInsets.all(4.0),
       child: ListTile(
-        contentPadding: EdgeInsets.all(10.0),
+        contentPadding: const EdgeInsets.all(10.0),
         leading: Icon(Icons.contacts),
         title: Text(human.name),
         subtitle: Text(human.email),
