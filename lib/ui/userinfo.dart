@@ -18,15 +18,6 @@ class UserInfo extends StatelessWidget {
         flex: 4,
         child: ListMenu(),
       ),
-      const Expanded(
-          child: Center(
-              child: Text(
-        'Help.me',
-        style: TextStyle(
-            fontFamily: 'Abhaya Libre SemiBold',
-            fontSize: 16,
-            fontWeight: FontWeight.w600),
-      )))
     ]);
   }
 }
@@ -40,6 +31,12 @@ Widget ListMenu() {
         subtitle: textos('Sofia Vergara', 14.0, FontWeight.w400),
         onTap: () => () {},
       ),
+      MaterialButton(
+        child: Icon(Icons.create_sharp),
+        onPressed: () {
+          _showAlert(context);
+        },
+      ),
       ListTile(
           leading: icons('herCoNtact'),
           title: textos('Telefono', 17.0, FontWeight.w500),
@@ -47,6 +44,52 @@ Widget ListMenu() {
           onTap: () => () {}),
     ],
   );
+}
+
+void _showAlert(BuildContext context) {
+  showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Escriba su nombre'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              )
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                ;
+              },
+            ),
+            TextButton(
+              child: Text('Cancelar'),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                ;
+              },
+            )
+          ],
+        );
+      });
 }
 
 Widget customAppBar() {
