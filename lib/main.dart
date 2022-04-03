@@ -1,8 +1,8 @@
-import 'package:apphelpme/ui/contacts.dart';
-import 'package:flutter/material.dart';
-import 'package:apphelpme/ui/help_page.dart';
+import 'package:apphelpme/ui/home_page.dart';
 import 'package:apphelpme/ui/menu_page.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -15,13 +15,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Base project',
+        title: 'Menu Page',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red,
         ),
         home: Scaffold(
-          body: SafeArea(child: Contacts()),
+          appBar: AppBar(
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Get.to(() => MenuPage());
+                },
+              )
+            ],
+            title: const Text('Help.me'),
+          ),
+          body: SafeArea(child: HomePage()),
         ));
   }
 }
-//Danilo

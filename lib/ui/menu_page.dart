@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/listItems.dart';
+import 'contacts.dart';
 import 'help_page.dart';
+import 'message.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      customAppBar(),
-      Container(
-        height: 125.0,
-        // color: Colors.red[200],
-        child: headBar(),
-      ),
-      Expanded(
-        flex: 4,
-        child: ListMenu(),
-      ),
-      const Expanded(
-          child: Center(
-              child: Text(
-        'Help.me',
-        style: TextStyle(
-            fontFamily: 'Abhaya Libre SemiBold',
-            fontSize: 16,
-            fontWeight: FontWeight.w600),
-      )))
-    ]);
+    return Material(
+      child: Column(children: [
+        customAppBar(),
+        Container(
+          height: 125.0,
+          child: headBar(),
+        ),
+        Expanded(
+          flex: 4,
+          child: ListMenu(),
+        ),
+        const Expanded(
+            child: Center(
+                child: Text(
+          'Help.me',
+          style: TextStyle(
+              fontFamily: 'Abhaya Libre SemiBold',
+              fontSize: 16,
+              fontWeight: FontWeight.w600),
+        )))
+      ]),
+    );
   }
 }
 
-// class ListMenu extends StatelessWidget {
-//   const ListMenu({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
   Widget ListMenu(){
     return ListView(
       children: [
@@ -44,8 +42,7 @@ class MenuPage extends StatelessWidget {
           title: textos('Usuario', 17.0, FontWeight.w500),
           subtitle: textos(
               'Editar nombre, cambiar foto de perfil', 14.0, FontWeight.w400),
-          onTap: () => () {},
-        ),
+          onTap: () => () {Get.to(()=> Contacts());}),
         ListTile(
             leading: icons('herCoNtact'),
             title: textos('Contactos', 17.0, FontWeight.w500),
@@ -58,7 +55,7 @@ class MenuPage extends StatelessWidget {
                 textos('Personalizar mensaje de alerta', 17.0, FontWeight.w500),
             subtitle: textos(
                 'Editar mensaje, editar notificaciones', 14.0, FontWeight.w400),
-            onTap: () => () {}),
+            onTap: () => () {Get.to(()=> Message());}),
         ListTile(
             leading: icons('terminos'),
             title: textos('Térrminos y condiciones', 17.0, FontWeight.w500),

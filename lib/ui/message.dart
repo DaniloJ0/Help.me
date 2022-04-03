@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Message extends StatefulWidget {
   Message({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class _MessageState extends State<Message> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Welcome to Flutter',
       theme: ThemeData(
         // Define the default brightness and colors.
