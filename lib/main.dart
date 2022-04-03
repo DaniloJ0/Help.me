@@ -1,4 +1,7 @@
+import 'package:apphelpme/ui/tyc.dart';
+import 'package:apphelpme/ui/userinfo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +17,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Base project',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red,
         ),
         home: Scaffold(
-          body: SafeArea(child: MenuPage()),
+          body: SafeArea(child: UserInfo()),
         ));
   }
 }

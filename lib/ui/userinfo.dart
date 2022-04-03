@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/listItems.dart';
-import 'help_page.dart';
 
 class UserInfo extends StatelessWidget {
   const UserInfo({Key? key}) : super(key: key);
@@ -31,26 +30,24 @@ class UserInfo extends StatelessWidget {
     ]);
   }
 }
-Widget ListMenu(){
-    return ListView(
-      children: [
-        ListTile(
-          leading: icons('contact'),
-          title: textos('Nombre', 17.0, FontWeight.w500),
-          subtitle: textos(
-              'Sofia Vergara', 14.0, FontWeight.w400),
-          onTap: () => () {},
-        ),
-        ListTile(
-            leading: icons('herCoNtact'),
-            title: textos('Telefono', 17.0, FontWeight.w500),
-            subtitle: textos('30050649233', 14.0,
-                FontWeight.w400),
-            onTap: () => () {}),
-      ],
-    );
-  }
 
+Widget ListMenu() {
+  return ListView(
+    children: [
+      ListTile(
+        leading: icons('contact'),
+        title: textos('Nombre', 17.0, FontWeight.w500),
+        subtitle: textos('Sofia Vergara', 14.0, FontWeight.w400),
+        onTap: () => () {},
+      ),
+      ListTile(
+          leading: icons('herCoNtact'),
+          title: textos('Telefono', 17.0, FontWeight.w500),
+          subtitle: textos('30050649233', 14.0, FontWeight.w400),
+          onTap: () => () {}),
+    ],
+  );
+}
 
 Widget customAppBar() {
   return Row(
@@ -79,21 +76,20 @@ Widget headBar() {
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
       Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: Container(
-              alignment: Alignment.center,
-              width: 150.0,
-              height: 150.0,
-              child: const CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('lib/assets/sofia.png')),
-              decoration: const BoxDecoration(
-                color: Colors.redAccent,
-                shape: BoxShape.circle,
-              ))),
-                    ),
-   
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: Container(
+            alignment: Alignment.center,
+            width: 150.0,
+            height: 150.0,
+            child: const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage('lib/assets/sofia.png')),
+            decoration: const BoxDecoration(
+              color: Colors.redAccent,
+              shape: BoxShape.circle,
+            )),
+      ),
     ],
   );
 }
