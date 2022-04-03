@@ -79,8 +79,8 @@ Widget headBar() {
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Container(
             alignment: Alignment.center,
-            width: 150.0,
-            height: 150.0,
+            width: 75.0,
+            height: 75.0,
             child: const CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.white,
