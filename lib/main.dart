@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Message(),
-      //home: Contacts(),
+      //home: Message(),
+      home: Contacts(),
     );
   }
 }
