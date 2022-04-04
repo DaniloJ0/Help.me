@@ -13,7 +13,7 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('Configuración'),
         backgroundColor: const Color.fromARGB(255, 245, 10, 10),
         centerTitle: true,
       ),
