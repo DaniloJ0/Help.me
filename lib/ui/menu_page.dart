@@ -1,17 +1,24 @@
+import 'package:apphelpme/ui/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/listItems.dart';
-import 'contacts.dart';
+import 'contacts_page.dart';
 import 'help_page.dart';
 import 'message.dart';
+import 'terms_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(children: [
-        customAppBar(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        centerTitle: true,
+      ),
+      body:Column(children: [
+        // customAppBar(),
         Container(
           height: 125.0,
           child: headBar(),
@@ -42,26 +49,34 @@ class MenuPage extends StatelessWidget {
           title: textos('Usuario', 17.0, FontWeight.w500),
           subtitle: textos(
               'Editar nombre, cambiar foto de perfil', 14.0, FontWeight.w400),
-          onTap: () => () {Get.to(()=> Contacts());}),
+          onTap: () => Get.to(()=>UserInfo(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))),
         ListTile(
             leading: icons('herCoNtact'),
             title: textos('Contactos', 17.0, FontWeight.w500),
             subtitle: textos('Editar lista de contactos, mostrar lista', 14.0,
                 FontWeight.w400),
-            onTap: () => () {}),
+            onTap: () => Get.to(()=> Contacts(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))),
         ListTile(
             leading: icons('editMessage'),
             title:
                 textos('Personalizar mensaje de alerta', 17.0, FontWeight.w500),
             subtitle: textos(
                 'Editar mensaje, editar notificaciones', 14.0, FontWeight.w400),
-            onTap: () => () {Get.to(()=> Message());}),
+            onTap: () => Get.to(()=> Message(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))),
         ListTile(
             leading: icons('terminos'),
             title: textos('Térrminos y condiciones', 17.0, FontWeight.w500),
             subtitle: textos(
                 'Terminos y politica de privacidad', 14.0, FontWeight.w400),
-            onTap: () => () {}),
+            onTap: () => Get.to(() => TermsPage(), 
+                  transition: Transition.leftToRight,
+                  duration: const Duration(milliseconds: 450))),
         ListTile(
             leading: icons('ayuda'),
             title: textos('Ayuda', 17.0, FontWeight.w500),

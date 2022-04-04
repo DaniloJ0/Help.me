@@ -9,9 +9,14 @@ class HelpCenterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
+      appBar: AppBar(
+        title: const Text('Centro de ayuda'),
+        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        centerTitle: true,
+      ),
+      body: SafeArea(
             child: Column(
-                children: [customAppBar(), Expanded(child: ListMenu())])));
+                children: [Expanded(child: ListMenu())])));
   }
 }
 

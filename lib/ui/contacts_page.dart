@@ -13,38 +13,40 @@ class Contacts extends StatefulWidget {
 
 class _ContactsState extends State<Contacts> {
   int counter = 0;
-  List<Human> entries = <Human>[Human('Cristian Duran','3025456458')];
+  List<Human> entries = <Human>[Human('Cristian Duran', '3025456458')];
 
   void onPressed() {
     setState(() {
-      entries.add(Human(faker.person.name(),
-          (faker.randomGenerator.decimal(min: 3000000000,scale: 115654945).floor()).toString()));
+      entries.add(Human(
+          faker.person.name(),
+          (faker.randomGenerator
+                  .decimal(min: 3000000000, scale: 115654945)
+                  .floor())
+              .toString()));
       counter = entries.length;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Contactos de Emergencia'),
-          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
-          centerTitle: true,
-        ),
-        body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: entries.length,
-          itemBuilder: (context, index) {
-            return _row(entries[index], index);
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => setState(() => {onPressed()}),
-          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
-          tooltip: 'Añadir Contacto',
-          child: const Icon(Icons.add),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Contactos de Emergencia'),
+        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: entries.length,
+        itemBuilder: (context, index) {
+          return _row(entries[index], index);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(() => {onPressed()}),
+        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        tooltip: 'Añadir Contacto',
+        child: const Icon(Icons.add),
       ),
     );
   }

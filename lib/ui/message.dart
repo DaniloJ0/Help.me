@@ -15,13 +15,11 @@ class _MessageState extends State<Message> {
   void funcion(int saveorclear) {
     if (saveorclear == 1) {
       //Guardar el mensaje
-      print("Mensaje Guardado");
     } else {
       if (saveorclear == 2) {
         setState(() {
           _name = 'Ayudame! Estoy en peligro!';
           msgHolder.clear();
-          print("Mensaje Reestablecido");
         });
       }
     }
@@ -29,56 +27,47 @@ class _MessageState extends State<Message> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Welcome to Flutter',
-      theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.light,
-        primaryColor: Colors.red,
-        fontFamily: 'Arial',
-      ),
-      home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 245, 10, 10),
-            centerTitle: true,
-            title: const Text('Personalizar Mensaje'),
-          ),
-          body: SizedBox(
-            height: 200,
-            child: Column(
-              children: [
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+          centerTitle: true,
+          title: const Text('Personalizar Mensaje'),
+        ),
+        body: SizedBox(
+          height: 250,
+          child: Column(
+            children: [
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: _createInput(),
+              )),
+              Row(children: [
                 Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: _createInput(),
-                )),
-                Row(children: [
-                  Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: _createButton("Guardar", 1)),
-                  ),
-                  Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: _createButton("Reestablecer", 2)),
-                  ),
-                  //Mensaje actual
-                ]),
-                Container(
-                    child: const Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Text("El mensaje de alerta actual es:"),
-                )),
-                Container(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Text(_name),
-                )),
-              ],
-            ),
-          )),
-    );
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: _createButton("Guardar", 1)),
+                ),
+                Expanded(
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: _createButton("Reestablecer", 2)),
+                ),
+                //Mensaje actual
+              ]),
+              Container(
+                  child: const Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Text("El mensaje de alerta actual es:"),
+              )),
+              Container(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Text(_name),
+              )),
+            ],
+          ),
+        ));
   }
 
   Widget _createInput() {
@@ -97,7 +86,6 @@ class _MessageState extends State<Message> {
         setState(() {
           _name = value;
         });
-        //print(value);
       },
     );
   }

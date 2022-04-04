@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            backgroundColor: const Color.fromARGB(230, 245, 10, 10),
             centerTitle: true,
             actions: <Widget>[
               IconButton(

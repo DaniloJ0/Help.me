@@ -13,8 +13,13 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ayuda'),
+        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        centerTitle: true,
+      ),
       body: SafeArea(child: Column(children: [
-      customAppBar(),
+      // customAppBar(),
       Expanded(
         child: ListMenu()
         )
