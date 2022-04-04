@@ -71,7 +71,7 @@ class MenuPage extends StatelessWidget {
                   duration: const Duration(milliseconds: 450))),
         ListTile(
             leading: icons('terminos'),
-            title: textos('Térrminos y condiciones', 17.0, FontWeight.w500),
+            title: textos('Términos y condiciones', 17.0, FontWeight.w500),
             subtitle: textos(
                 'Terminos y politica de privacidad', 14.0, FontWeight.w400),
             onTap: () => Get.to(() => TermsPage(), 

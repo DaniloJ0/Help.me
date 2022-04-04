@@ -26,7 +26,7 @@ class AppInfoPage extends StatelessWidget {
 Widget listItems(){
   return ListView(children: [
     items('Nombre de la app', 'Help.me'),
-    items('Desarrollado ', 'Flutter (Dart)'),
+    items('Desarrollado', 'Flutter (Dart)'),
     items('Fecha', '27/05/2022'),
     items('Plataformas', 'IOS/Android'),
     items('Origen', 'Uninorte'),
