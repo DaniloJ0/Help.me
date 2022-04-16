@@ -10,7 +10,7 @@ class UserInfo extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Usuario'),
-          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+          backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
         ),
         body: Column(children: [

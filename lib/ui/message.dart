@@ -29,7 +29,7 @@ class _MessageState extends State<Message> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+          backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
           title: const Text('Personalizar Mensaje'),
         ),

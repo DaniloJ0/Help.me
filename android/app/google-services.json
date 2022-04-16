@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "419964649158",
+    "project_id": "help-me-bc913",
+    "storage_bucket": "help-me-bc913.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419964649158:android:81159f7786526fde4661c7",
+        "android_client_info": {
+          "package_name": "com.example.apphelpme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419964649158-4jrco0dsghjjitgstdrsdj53om40mmec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj_KScoxUdnxfrJQXncAKqPC9K0F6Duac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419964649158-4jrco0dsghjjitgstdrsdj53om40mmec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

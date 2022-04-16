@@ -1,20 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'menu_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Scaffold(
+      appBar: AppBar(
+            backgroundColor: const Color(0xffff2d55),
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Get.to(() => MenuPage());
+                },
+              )
+            ],
+            title: const Text('Help.me'),
+          ),
+      body:Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
           flex: 4,
           child:MaterialButton(
-            color: Colors.red[400],
+            color: Color(0xffff2d55),
             shape: const CircleBorder(),
             onPressed: ()=> (){},
             child: const Padding(
-              padding: EdgeInsets.all(80),
+              padding: EdgeInsets.all(40),
               child: Text(
                 'HELP',
                 style: TextStyle(
@@ -32,7 +52,7 @@ class HomePage extends StatelessWidget {
           ],)
       )],
       ),
-    );
+    ));
   }
 }
 

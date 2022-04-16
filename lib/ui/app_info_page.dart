@@ -10,7 +10,7 @@ class AppInfoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('App info'),
-        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        backgroundColor: const Color(0xffff2d55),
         centerTitle: true,
       ),
       body: SafeArea(

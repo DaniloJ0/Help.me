@@ -32,7 +32,7 @@ class _ContactsState extends State<Contacts> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contactos de Emergencia'),
-        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
+        backgroundColor: const Color(0xffff2d55),
         centerTitle: true,
       ),
       body: ListView.builder(
