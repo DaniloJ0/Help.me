@@ -1,15 +1,32 @@
 import 'package:apphelpme/ui/home_page.dart';
-import 'package:apphelpme/ui/menu_page.dart';
 import 'package:apphelpme/ui/sign_up_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final auth = FirebaseAuth.instance;
+  String _email = '';
+  String _password = '';
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Scaffold(
+          appBar: AppBar(
+        title: const Text('Login'),
+        backgroundColor: const Color(0xffff2d55),
+        centerTitle: true,
+      ),
+          body: SafeArea(child: Stack(
       children: <Widget>[
+        //imagen de fondo
         Container(
           decoration: BoxDecoration(
               image: DecorationImage(
@@ -17,6 +34,7 @@ class SignInPage extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   alignment: Alignment.topCenter)),
         ),
+        //Layout blanco
         Container(
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(top: 190),
@@ -32,7 +50,13 @@ class SignInPage extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                   child: Container(
                     color: Color(0xfff5f5f5),
-                    child: TextFormField(
+                    child: TextFormField(// Usuario
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        setState(() {
+                          _email = value.toString().trim();
+                        });
+                      },
                       style: TextStyle(
                           color: Colors.black, fontFamily: 'SFUIDisplay'),
                       decoration: InputDecoration(
@@ -46,7 +70,18 @@ class SignInPage extends StatelessWidget {
                 Container(
                   color: Color(0xfff5f5f5),
                   child: TextFormField(
+                    //password
                     obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Por favor, ingresa un contraseña";
+                      }
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _password = value;
+                      });
+                    },
                     style: TextStyle(
                         color: Colors.black, fontFamily: 'SFUIDisplay'),
                     decoration: InputDecoration(
@@ -59,7 +94,19 @@ class SignInPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 25),
                   child: MaterialButton(
-                    onPressed: () => Get.to(HomePage()), //since this is only a UI app
+                    onPressed: () => () async {
+                      try {
+                        final user = await auth.signInWithEmailAndPassword(
+                            email: _email, password: _password);
+                        if (user != null) {
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return HomePage();
+                          }));
+                        }} catch (e) {
+                        throw e;
+                      }
+                    },
+                    //Get.to(()=>HomePage()), //since this is only a UI app
                     child: Text(
                       'Ingresar',
                       style: TextStyle(
@@ -77,18 +124,6 @@ class SignInPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(top: 20),
-                //   child: Center(
-                //     child: Text(
-                //       '¿Olvidaste tu contraseña?',
-                //       style: TextStyle(
-                //           fontFamily: 'SFUIDisplay',
-                //           fontSize: 15,
-                //           fontWeight: FontWeight.bold),
-                //     ),
-                //   ),
-                // ),
                 Padding(
                   padding: EdgeInsets.only(top: 30.0),
                   child: Center(
@@ -102,15 +137,15 @@ class SignInPage extends StatelessWidget {
                               fontSize: 15,
                             )),
                         TextSpan(
-                            text: "  Registrate",
-                            style: TextStyle(
+                          text: "  Registrate",
+                          style: TextStyle(
                               fontFamily: 'SFUIDisplay',
                               color: Color(0xffff2d55),
                               fontSize: 15,
-                              fontWeight: FontWeight.w600
-                            ),
-                            recognizer: TapGestureRecognizer()..onTap = ()=>Get.to(SignUpPage()),
-                            )
+                              fontWeight: FontWeight.w600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Get.to(() => SignUpPage()),
+                        )
                       ]),
                     ),
                   ),
@@ -120,6 +155,6 @@ class SignInPage extends StatelessWidget {
           ),
         )
       ],
-    );
+    )));
   }
 }

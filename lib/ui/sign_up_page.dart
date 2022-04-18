@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatelessWidget {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String _user = '';
+  String _email = '';
+  String _password = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,8 +14,7 @@ class SignUpPage extends StatelessWidget {
           backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
         ),
-      body:
-        Container(
+        body: Container(
           width: MediaQuery.of(context).size.width,
           // margin: EdgeInsets.only(top: 50),
           decoration: BoxDecoration(
@@ -26,6 +30,11 @@ class SignUpPage extends StatelessWidget {
                   child: Container(
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
+                      //Usuario
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        _user = value.toString().trim();
+                      },
                       style: TextStyle(
                           color: Colors.black, fontFamily: 'SFUIDisplay'),
                       decoration: InputDecoration(
@@ -36,38 +45,69 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                 ),
-               Container(
-                    color: Color(0xfff5f5f5),
-                    child: TextFormField(
-                      style: TextStyle(
-                          color: Colors.black, fontFamily: 'SFUIDisplay'),
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Correo',
-                          prefixIcon: Icon(Icons.mail_outline),
-                          labelStyle: TextStyle(fontSize: 15)),
-                    ),
-                  ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child:Container(
+                Container(
                   color: Color(0xfff5f5f5),
                   child: TextFormField(
-                    obscureText: true,
+                    //Correo
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      _email = value.toString().trim();
+                    },
                     style: TextStyle(
                         color: Colors.black, fontFamily: 'SFUIDisplay'),
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Contraseña',
-                        prefixIcon: Icon(Icons.lock_outline),
+                        labelText: 'Correo',
+                        prefixIcon: Icon(Icons.mail_outline),
                         labelStyle: TextStyle(fontSize: 15)),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: Container(
+                    color: Color(0xfff5f5f5),
+                    child: TextFormField(
+                      //Password
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Por favor, ingresa un contraseña";
+                        }
+                      },
+                      onChanged: (value) {
+                        _password = value;
+                      },
+                      style: TextStyle(
+                          color: Colors.black, fontFamily: 'SFUIDisplay'),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Contraseña',
+                          prefixIcon: Icon(Icons.lock_outline),
+                          labelStyle: TextStyle(fontSize: 15)),
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: MaterialButton(
-                    onPressed: () {}, //since this is only a UI app
+                    onPressed: () async {
+                      try {
+                        await _auth.createUserWithEmailAndPassword(
+                            email: _email, password: _password);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
+                          Text('Sucessfully Register.You Can Login Now'),
+                          duration: Duration(seconds: 5),
+                          ),
+                        );
+                        Navigator.of(context).pop();
+                      } on FirebaseAuthException catch (e) {
+                        showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                                title: Text(' Ops! Registration Failed'),
+                                content: Text('${e.message}')));
+                      }
+                    }, //since this is only a UI app
                     child: Text(
                       'Registrar',
                       style: TextStyle(
@@ -88,7 +128,6 @@ class SignUpPage extends StatelessWidget {
               ],
             ),
           ),
-        )
-      );
+        ));
   }
 }

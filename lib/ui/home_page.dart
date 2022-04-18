@@ -1,3 +1,4 @@
+import 'package:apphelpme/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
             ],
             title: const Text('Help.me'),
           ),
-      body:Center(
+      body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
           child:MaterialButton(
             color: Color(0xffff2d55),
             shape: const CircleBorder(),
-            onPressed: ()=> (){},
+            onPressed: ()=>  Get.to(() => SignInPage()),
             child: const Padding(
               padding: EdgeInsets.all(40),
               child: Text(
