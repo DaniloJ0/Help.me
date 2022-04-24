@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatelessWidget {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   String _user = '';
   String _email = '';
   String _password = '';
@@ -94,9 +94,12 @@ class SignUpPage extends StatelessWidget {
                       try {
                         await _auth.createUserWithEmailAndPassword(
                             email: _email, password: _password);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
-                          Text('Sucessfully Register.You Can Login Now'),
-                          duration: Duration(seconds: 5),
+                        print(_email + ' - ' + _password);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('Sucessfully Register.You Can Login Now'),
+                            duration: Duration(seconds: 5),
                           ),
                         );
                         Navigator.of(context).pop();

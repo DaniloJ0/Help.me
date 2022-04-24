@@ -53,7 +53,7 @@ class MenuPage extends StatelessWidget {
                   transition: Transition.leftToRight,
                   duration: const Duration(milliseconds: 450))),
         ListTile(
-            leading: icons('herCoNtact'),
+            leading: icons('herContact'),
             title: textos('Contactos', 17.0, FontWeight.w500),
             subtitle: textos('Editar lista de contactos, mostrar lista', 14.0,
                 FontWeight.w400),

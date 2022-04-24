@@ -36,7 +36,7 @@ Widget ListMenu(context) {
         onTap: () => _showAlert(context),
       ),
       ListTile(
-          leading: icons('herCoNtact'),
+          leading: icons('herContact'),
           title: textos('Telefono', 17.0, FontWeight.w500),
           subtitle: textos('+57 3005069233', 14.0, FontWeight.w400),
           onTap: () => () {}),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/appBar.dart';
 import '../widgets/listItems.dart';
 
 class AppInfoPage extends StatelessWidget {
