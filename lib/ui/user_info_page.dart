@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/listItems.dart';
 
-class UserInfo extends StatelessWidget {
-  const UserInfo({Key? key}) : super(key: key);
+class UserInfor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +27,13 @@ class UserInfo extends StatelessWidget {
 }
 
 Widget ListMenu(context) {
+  final String email = FirebaseAuth.instance.currentUser!.email.toString();
   return ListView(
     children: [
       ListTile(
         leading: icons('contact'),
-        title: textos('Nombre', 17.0, FontWeight.w500),
-        subtitle: textos('Sofia Vergara', 14.0, FontWeight.w400),
+        title: textos('Email', 17.0, FontWeight.w500),
+        subtitle: textos(email , 14.0, FontWeight.w400),
         onTap: () => _showAlert(context),
       ),
       ListTile(
@@ -43,6 +44,7 @@ Widget ListMenu(context) {
     ],
   );
 }
+
 
 void _showAlert(BuildContext context) {
   showDialog(
@@ -57,9 +59,8 @@ void _showAlert(BuildContext context) {
               const TextField(
                 obscureText: false,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Escriba su nombre'
-                ),
+                    border: OutlineInputBorder(),
+                    hintText: 'Escriba su nombre'),
               )
             ],
           ),
@@ -96,48 +97,47 @@ Widget headBar() {
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
       Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [circle(), iconChangePhoto()])
-      ),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [circle(), iconChangePhoto()])),
     ],
   );
 }
 
-Widget iconChangePhoto(){
+Widget iconChangePhoto() {
   return InkWell(
-    onTap: () => (){},
+    onTap: () => () {},
     child: Container(
-              alignment: Alignment.bottomRight,
-              width: 30.0,
-              height: 30.0,
-              child: const Padding(
-                padding: EdgeInsets.all(2.5),
-                child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('lib/assets/editProfile.png')),
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.circle,
-              ),
-            ),
+      alignment: Alignment.bottomRight,
+      width: 30.0,
+      height: 30.0,
+      child: const Padding(
+        padding: EdgeInsets.all(2.5),
+        child: CircleAvatar(
+            radius: 60,
+            backgroundColor: Colors.white,
+            backgroundImage: AssetImage('lib/assets/editProfile.png')),
+      ),
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+        shape: BoxShape.circle,
+      ),
+    ),
   );
 }
 
-Widget circle(){
+Widget circle() {
   return Container(
-            alignment: Alignment.center,
-            width: 90.0,
-            height: 90.0,
-            child: const CircleAvatar(
-                radius: 70,
-                backgroundColor: Colors.white,
-                backgroundImage: AssetImage('lib/assets/sofia.png')),
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-              shape: BoxShape.circle,
-            ));
+      alignment: Alignment.center,
+      width: 90.0,
+      height: 90.0,
+      child: const CircleAvatar(
+          radius: 70,
+          backgroundColor: Colors.white,
+          backgroundImage: AssetImage('lib/assets/sofia.png')),
+      decoration: const BoxDecoration(
+        color: Colors.grey,
+        shape: BoxShape.circle,
+      ));
 }

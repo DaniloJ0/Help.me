@@ -6,6 +6,7 @@ import 'contacts_page.dart';
 import 'help_page.dart';
 import 'message.dart';
 import 'terms_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class MenuPage extends StatelessWidget {
           title: textos('Usuario', 17.0, FontWeight.w500),
           subtitle: textos(
               'Editar nombre, cambiar foto de perfil', 14.0, FontWeight.w400),
-          onTap: () => Get.to(()=>UserInfo(), 
+          onTap: () => Get.to(() => UserInfor(), 
                   transition: Transition.leftToRight,
                   duration: const Duration(milliseconds: 450))),
         ListTile(
@@ -114,6 +115,7 @@ Widget appBar() {
 }
 
 Widget headBar() {
+  final String _email = FirebaseAuth.instance.currentUser!.email.toString();
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
@@ -137,7 +139,7 @@ Widget headBar() {
               borderRadius: BorderRadius.circular(20.0),
               color: Colors.red,
               child: Container(
-                width: 180.0,
+                width: 200.0,
                 height: 60.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
@@ -146,10 +148,10 @@ Widget headBar() {
                   borderRadius: BorderRadius.circular(13.0),
                   child: Container(
                       color: const Color.fromARGB(255, 252, 243, 243),
-                      child: const Padding(
+                      child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 7, 0, 0),
                           child: Text(
-                            'Sofia Vergara\n+57 3037895496',
+                            _email,
                             style: TextStyle(
                               fontSize: 14.0,
                               fontFamily: 'Sunflower',
