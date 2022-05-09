@@ -1,6 +1,7 @@
 import 'package:apphelpme/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'menu_page.dart';
 
@@ -8,62 +9,63 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-            backgroundColor: const Color(0xffff2d55),
-            centerTitle: true,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Get.to(() => MenuPage());
-                },
-              )
-            ],
-            title: const Text('Help.me'),
-          ),
-      body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-          flex: 4,
-          child:MaterialButton(
-            color: Color(0xffff2d55),
-            shape: const CircleBorder(),
-            onPressed: ()=>  (){},//Get.to(() => SignInPage()),
-            child: const Padding(
-              padding: EdgeInsets.all(40),
-              child: Text(
-                'HELP',
-                style: TextStyle(
-                    color: Colors.white, fontSize: 60, fontFamily: 'Suez One'),
+        appBar: AppBar(
+          backgroundColor: const Color(0xffff2d55),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
               ),
-            ),
-          ),
+              onPressed: () {
+                Get.to(() => MenuPage());
+              },
+            )
+          ],
+          title: const Text('Help.me'),
         ),
-        Expanded(
-          flex: 2,
-          child: Column(children: [
-          const Text('Presione el botón para\n         pedir ayuda\n',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-          const Text('Su ubicación actual es:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          const Text('Uninorte, Barranquilla', style: TextStyle(fontSize: 20)),
-          ],)
-      )],
-      ),
-    ));
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: MaterialButton(
+                  color: Color(0xffff2d55),
+                  shape: const CircleBorder(),
+                  onPressed: () {
+                    launch('sms:+57xxxxxxxxx?body=Ayuda! me encuentro en peligro, te comparto mi ubicación');
+                  }, //Get.to(() => SignInPage()),
+                  child: const Padding(
+                    padding: EdgeInsets.all(40),
+                    child: Text(
+                      'HELP',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 60,
+                          fontFamily: 'Suez One'),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      const Text(
+                          'Presione el botón para\n         pedir ayuda\n',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700)),
+                      const Text('Su ubicación actual es:',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w600)),
+                      const Text('Uninorte, Barranquilla',
+                          style: TextStyle(fontSize: 20)),
+                    ],
+                  ))
+            ],
+          ),
+        ));
   }
 }
-
-
-// Widget FadedCircle(){
-//   return RippleAnimation(
-//   repeat: false,
-//   color: Colors.blue,
-//   minRadius: 100,
-//   ripplesCount: 6,
-//   child: Container()
-// );
-// }

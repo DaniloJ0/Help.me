@@ -57,7 +57,6 @@ class _SignInPageState extends State<SignInPage> {
                           onChanged: (value) {
                             setState(() {
                               _email = value.toString().trim();
-                              print(_email);
                             });
                           },
                           style: TextStyle(

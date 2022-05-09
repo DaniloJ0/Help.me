@@ -14,13 +14,7 @@ void main() async {
     print('Error');
   }
 
-  runApp(MyApp()
-      // await Firebase.initializeApp();
-      // ChangeNotifierProvider(
-      //   create: (context) => ApplicationState(),
-      //   builder: (context, _) => MyApp(),
-      // ),
-      );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
