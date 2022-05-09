@@ -1,7 +1,7 @@
-import 'package:apphelpme/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 import 'menu_page.dart';
 
@@ -35,8 +35,10 @@ class HomePage extends StatelessWidget {
                   color: Color(0xffff2d55),
                   shape: const CircleBorder(),
                   onPressed: () {
-                    launch('sms:+57xxxxxxxxx?body=Ayuda! me encuentro en peligro, te comparto mi ubicación');
-                  }, //Get.to(() => SignInPage()),
+                   sending_SMS('Ayuda! me encuentro en peligro, te comparto mi ubicación', ['+573146347090', '+573145616716']);
+                    // launch(
+                    //     'sms:+57xxxxxxxxx?body=Ayuda! me encuentro en peligro, te comparto mi ubicación');
+                  }, 
                   child: const Padding(
                     padding: EdgeInsets.all(40),
                     child: Text(
@@ -68,4 +70,12 @@ class HomePage extends StatelessWidget {
           ),
         ));
   }
+}
+
+void sending_SMS(String msg, List<String> list_receipents) async {
+  String send_result = await sendSMS(message: msg, recipients: list_receipents)
+      .catchError((err) {
+    print(err);
+  });
+  print(send_result);
 }
