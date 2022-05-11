@@ -35,9 +35,7 @@ class HomePage extends StatelessWidget {
                   color: Color(0xffff2d55),
                   shape: const CircleBorder(),
                   onPressed: () {
-                   sending_SMS('Ayuda! me encuentro en peligro, te comparto mi ubicación', ['+573146347090', '+573145616716']);
-                    // launch(
-                    //     'sms:+57xxxxxxxxx?body=Ayuda! me encuentro en peligro, te comparto mi ubicación');
+                   sending_SMS('Ayuda! me encuentro en peligro, te comparto mi ubicación', ['+573146347090']);
                   }, 
                   child: const Padding(
                     padding: EdgeInsets.all(40),
