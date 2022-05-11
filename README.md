@@ -11,20 +11,17 @@ flutter run
 
 # * Danilo Jimenez Rangel 
 
-1-nouns-vs-adjectives
+nouns-vs-adjectives
 https://github.com/UninorteMovil/nouns-vs-adjectives-v2-DaniloJ0
 
-2-conversosbinariodecimallayout
+conversosbinariodecimallayout
 https://github.com/UninorteMovil/conversosbinariodecimallayout-DaniloJ0
 
-3-stateprovider
+stateprovider
 https://github.com/UninorteMovil/stateprovider-DaniloJ0
 
-4-stategetx
+stategetx
 https://github.com/UninorteMovil/stategetx-DaniloJ0
-
-5-thechat
-https://github.com/UninorteMovil/thechat-DaniloJ0
 
 
 # * Camilo Andrés Ruiz Guerra
@@ -67,6 +64,8 @@ https://github.com/UninorteMovil/stateprovider-vrmedina
 
 
 ## Video Backend I
+https://user-images.githubusercontent.com/12649707/167771272-351cd9c5-4e51-416d-9f95-47ae86c1decb.mp4
+
 
 
 
