@@ -107,8 +107,8 @@ class SignUpPage extends StatelessWidget {
                         showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                                title: Text(' Ops! Registration Failed'),
-                                content: Text('${e.message}')));
+                                title: Text('Ops! Por favor, valide los campos ingresados'),
+                                content: Text('Puede que no haya llenado algún campo')));
                       }
                     }, //since this is only a UI app
                     child: Text(

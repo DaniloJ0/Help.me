@@ -99,7 +99,7 @@ class _SignInPageState extends State<SignInPage> {
                       child: MaterialButton(
                         onPressed: () async {
                           try {
-                            print(_email + ' - ' + _password);
+                            // print(_email + ' - ' + _password);
                             final user = await auth.signInWithEmailAndPassword(
                                 email: _email, password: _password);
                             if (user != null) {
@@ -108,10 +108,12 @@ class _SignInPageState extends State<SignInPage> {
                                 return HomePage();
                               }));
                             } else {
-                              print('No user');
+                              ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(content: Text('No se encuentra registrado este correo')));
                             }
                           } catch (e) {
-                            print(throw e);
+                            ScaffoldMessenger.of(context)
+                                 .showSnackBar(const SnackBar(content: Text('Por favor, verifique los campos de usuario y/o contraseña.')));
                           }
                         },
                         //Get.to(()=>HomePage()), //since this is only a UI app

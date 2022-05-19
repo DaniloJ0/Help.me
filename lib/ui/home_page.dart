@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _sendSMS() async {
-    List<String> list_numeros = ['+573146347090', '+573015164378'];
+    List<String> list_numeros = ['+573146347090'];
     try {
       for (var i = 0; i < list_numeros.length; i++) {
         telephony.sendSms(
@@ -82,18 +82,10 @@ class _HomePageState extends State<HomePage> {
           message: '¡Ayuda! me encuentro en peligro, te comparto mi ubicación');
       }
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Messages Sent')));
+          .showSnackBar(const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('¡Opp! Ocurrió un error, compruebe si tiene saldo')));
+          content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')));
     }
   }
 }
-
-// void sending_SMS(String msg, List<String> list_receipents) async {
-//   String send_result = await sendSMS(message: msg, recipients: list_receipents)
-//       .catchError((err) {
-//     print(err);
-//   });
-//   print(send_result);
-// }
