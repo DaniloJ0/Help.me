@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+import 'package:telephony/telephony.dart';
 
 import 'menu_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final Telephony telephony = Telephony.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +40,7 @@ class HomePage extends StatelessWidget {
                 child: MaterialButton(
                   color: Color(0xffff2d55),
                   shape: const CircleBorder(),
-                  onPressed: () {
-                   sending_SMS('Ayuda! me encuentro en peligro, te comparto mi ubicación', ['+573146347090']);
-                  }, 
+                  onPressed: () => _sendSMS(),
                   child: const Padding(
                     padding: EdgeInsets.all(40),
                     child: Text(
@@ -67,12 +72,28 @@ class HomePage extends StatelessWidget {
           ),
         ));
   }
+
+  _sendSMS() async {
+    List<String> list_numeros = ['+573146347090', '+573015164378'];
+    try {
+      for (var i = 0; i < list_numeros.length; i++) {
+        telephony.sendSms(
+          to: '${list_numeros[i]}',
+          message: '¡Ayuda! me encuentro en peligro, te comparto mi ubicación');
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Messages Sent')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('¡Opp! Ocurrió un error, compruebe si tiene saldo')));
+    }
+  }
 }
 
-void sending_SMS(String msg, List<String> list_receipents) async {
-  String send_result = await sendSMS(message: msg, recipients: list_receipents)
-      .catchError((err) {
-    print(err);
-  });
-  print(send_result);
-}
+// void sending_SMS(String msg, List<String> list_receipents) async {
+//   String send_result = await sendSMS(message: msg, recipients: list_receipents)
+//       .catchError((err) {
+//     print(err);
+//   });
+//   print(send_result);
+// }
