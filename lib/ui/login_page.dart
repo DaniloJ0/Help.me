@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apphelpme/ui/home_page.dart';
 import 'package:apphelpme/ui/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,7 +95,7 @@ class _SignInPageState extends State<SignInPage> {
                             labelStyle: TextStyle(fontSize: 15)),
                       ),
                     ),
-                    //Sign In Buttom 
+                    //Sign In Buttom
                     Padding(
                       padding: EdgeInsets.only(top: 25),
                       child: MaterialButton(
@@ -103,17 +105,22 @@ class _SignInPageState extends State<SignInPage> {
                             final user = await auth.signInWithEmailAndPassword(
                                 email: _email, password: _password);
                             if (user != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Acceso exitoso.')));
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return HomePage();
                               }));
                             } else {
-                              ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(content: Text('No se encuentra registrado este correo')));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'No se encuentra registrado este correo')));
                             }
                           } catch (e) {
-                            ScaffoldMessenger.of(context)
-                                 .showSnackBar(const SnackBar(content: Text('Por favor, verifique los campos de usuario y/o contraseña.')));
+                            connection(context);
                           }
                         },
                         //Get.to(()=>HomePage()), //since this is only a UI app
@@ -166,5 +173,20 @@ class _SignInPageState extends State<SignInPage> {
             )
           ],
         )));
+  }
+}
+
+//Validacion de la conexion
+Future<void> connection(context) async {
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Por favor, verifique los campos de usuario y/o contraseña.')));
+    }
+  } on SocketException catch (_) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Sin acceso a internet.')));
   }
 }
