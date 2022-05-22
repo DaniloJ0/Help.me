@@ -9,8 +9,5 @@ Widget textos(text, fontSz, FontW) {
 }
 
 Widget icons(name) {
-  return CircleAvatar(
-      radius: 13,
-      backgroundColor: Colors.white,
-      backgroundImage: AssetImage('lib/assets/${name}.png'));
+  return ImageIcon(AssetImage('lib/assets/$name.png'), size: 25);
 }

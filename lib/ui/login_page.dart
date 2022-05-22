@@ -107,18 +107,18 @@ class _SignInPageState extends State<SignInPage> {
                             if (user != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text(
-                                          'Acceso exitoso.'), duration: Duration(seconds: 1)));
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return HomePage(
-                                  onPressed: () {},
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('x'),
+                                      content: Text('Acceso exitoso.'),
+                                      duration: Duration(seconds: 1)));
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(
+                                      onPressed: () {},
+                                      child: ElevatedButton(
+                                          onPressed: () {},
+                                          child: const Text('x')),
+                                    ),
                                   ),
-                                );
-                              }));
+                                  (route) => false);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

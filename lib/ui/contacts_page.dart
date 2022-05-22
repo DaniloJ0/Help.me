@@ -27,7 +27,7 @@ List<Contact> _suggestions = <Contact>[];
     if (await FlutterContacts.requestPermission()) {
       contacts = await FlutterContacts.getContacts(
           withProperties: true, withPhoto: true);
-      print(contacts);
+      // print(contacts);
       setState(() {});
     }
   }
