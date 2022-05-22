@@ -108,7 +108,7 @@ class _SignInPageState extends State<SignInPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text(
-                                          'Acceso exitoso.')));
+                                          'Acceso exitoso.'), duration: Duration(seconds: 1)));
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return HomePage(

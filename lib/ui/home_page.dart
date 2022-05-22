@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final Telephony telephony = Telephony.instance;
   late AnimationController _controller;
 
@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
     );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,11 +92,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                flex: 4,
-                child: Stack(
-              children: [Design(), buttonBig()],
-            )
-              ),
+                  flex: 4,
+                  child: Stack(
+                    children: [Design(), buttonBig()],
+                  )),
               Expanded(
                   flex: 2,
                   child: Column(
@@ -118,40 +116,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
         ));
   }
 
-Widget Design() {
+  Widget Design() {
     return Visibility(
       child: Center(
-        child:CustomPaint(
+        child: CustomPaint(
           painter: CirclePainter(
             _controller,
             color: widget.color,
           ),
-          child:_button(),
+          child: _button(),
+        ),
       ),
-    ),
       visible: true,
     );
   }
-  
-Widget buttonBig(){
-  return Center(
-    child: MaterialButton(
-                    color: Color.fromARGB(255, 232, 38, 74),
-                    shape: const CircleBorder(),
-                    onPressed: () => _sendSMS(), 
-                    child: const Padding(
-                      padding: EdgeInsets.all(70),
-                      child: Text(
-                        'HELP',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 60,
-                            fontFamily: 'Suez One'),
-                      ),
-                    ),
-                  ),
-  );
-}
+
+  Widget buttonBig() {
+    return Center(
+      child: MaterialButton(
+        color: Color.fromARGB(255, 232, 38, 74),
+        shape: const CircleBorder(),
+        onPressed: () => _sendSMS(),
+        child: const Padding(
+          padding: EdgeInsets.all(70),
+          child: Text(
+            'HELP',
+            style: TextStyle(
+                color: Colors.white, fontSize: 60, fontFamily: 'Suez One'),
+          ),
+        ),
+      ),
+    );
+  }
+
   _sendSMS() async {
     var permission = await Permission.locationAlways.isGranted;
     var permission_msg = await Permission.sms.isGranted;
@@ -159,26 +156,24 @@ Widget buttonBig(){
       var t = await Permission.locationAlways.request();
       var r = await Permission.sms.request();
     }
+    //Aqui va el mensaje sacado de la base de datos
+    String msg_help = '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     String lat_lng =
         position.latitude.toString() + ',' + position.longitude.toString();
     String msg =
-        '¡Ayuda! me encuentro en peligro, te comparto mi ubicación https://www.google.com/maps/search/?api=1&query=$lat_lng';
+        '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
     List<String> listNumeros = ['+573146347090'];
     try {
       for (var i = 0; i < listNumeros.length; i++) {
-        telephony.sendSms(
-            to: listNumeros[i],
-            message: msg,
-            isMultipart:
-                true); 
+        telephony.sendSms(to: listNumeros[i], message: msg, isMultipart: true);
       }
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')));
+          content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')), );
     }
   }
 }
