@@ -128,7 +128,7 @@ Widget headBar() {
               child: const CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('lib/assets/sofia.png')),
+                  backgroundImage: AssetImage('lib/assets/noPhoto.png')),
               decoration: const BoxDecoration(
                 color: Colors.redAccent,
                 shape: BoxShape.circle,
