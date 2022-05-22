@@ -7,16 +7,68 @@ import 'dart:convert';
 import 'package:geocode/geocode.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../widgets/circle_painter.dart';
+import '../widgets/curve_wave.dart';
 import 'menu_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({
+    this.size = 90.0,
+    this.color = Colors.red,
+    required this.child,
+    required this.onPressed,
+  });
+  final double size;
+  final Color color;
+  final Widget child;
+  final VoidCallback onPressed;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   final Telephony telephony = Telephony.instance;
+  late AnimationController _controller;
 
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget _button() {
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(widget.size),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: <Color>[widget.color, Colors.red],
+            ),
+          ),
+          child: ScaleTransition(
+            scale: Tween(begin: 0.95, end: 1.0).animate(
+              CurvedAnimation(
+                parent: _controller,
+                curve: const CurveWave(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,21 +94,9 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Expanded(
                 flex: 4,
-                child: MaterialButton(
-                  color: Color(0xffff2d55),
-                  shape: const CircleBorder(),
-                  onPressed: () => _sendSMS(), //_location(),
-                  child: const Padding(
-                    padding: EdgeInsets.all(40),
-                    child: Text(
-                      'HELP',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 60,
-                          fontFamily: 'Suez One'),
-                    ),
-                  ),
-                ),
+                child: Stack(
+              children: [Design(), buttonBig()],
+            )
               ),
               Expanded(
                   flex: 2,
@@ -78,6 +118,40 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+Widget Design() {
+    return Visibility(
+      child: Center(
+        child:CustomPaint(
+          painter: CirclePainter(
+            _controller,
+            color: widget.color,
+          ),
+          child:_button(),
+      ),
+    ),
+      visible: true,
+    );
+  }
+  
+Widget buttonBig(){
+  return Center(
+    child: MaterialButton(
+                    color: Color.fromARGB(255, 232, 38, 74),
+                    shape: const CircleBorder(),
+                    onPressed: () => _sendSMS(), 
+                    child: const Padding(
+                      padding: EdgeInsets.all(70),
+                      child: Text(
+                        'HELP',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 60,
+                            fontFamily: 'Suez One'),
+                      ),
+                    ),
+                  ),
+  );
+}
   _sendSMS() async {
     var permission = await Permission.locationAlways.isGranted;
     var permission_msg = await Permission.sms.isGranted;
@@ -85,10 +159,6 @@ class _HomePageState extends State<HomePage> {
       var t = await Permission.locationAlways.request();
       var r = await Permission.sms.request();
     }
-    // }else if(!permission_msg){
-    //   var r = await Permission.sms.request();
-    // }
-    print('entra1');
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     String lat_lng =
@@ -96,14 +166,13 @@ class _HomePageState extends State<HomePage> {
     String msg =
         '¡Ayuda! me encuentro en peligro, te comparto mi ubicación https://www.google.com/maps/search/?api=1&query=$lat_lng';
     List<String> listNumeros = ['+573146347090'];
-    print('entra2');
     try {
       for (var i = 0; i < listNumeros.length; i++) {
         telephony.sendSms(
             to: listNumeros[i],
             message: msg,
             isMultipart:
-                true); //'¡Ayuda! me encuentro en peligro, te comparto mi ubicación');
+                true); 
       }
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mensajes enviados a tus contactos')));

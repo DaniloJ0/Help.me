@@ -111,7 +111,13 @@ class _SignInPageState extends State<SignInPage> {
                                           'Acceso exitoso.')));
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return HomePage();
+                                return HomePage(
+                                  onPressed: () {},
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text('x'),
+                                  ),
+                                );
                               }));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
