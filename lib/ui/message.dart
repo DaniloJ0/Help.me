@@ -72,6 +72,7 @@ class _MessageState extends State<Message> {
 
   Widget _createInput() {
     return TextField(
+      maxLength: 80,
       //autofocus: true,
       controller: msgHolder,
       textCapitalization: TextCapitalization.words,
@@ -83,9 +84,15 @@ class _MessageState extends State<Message> {
           suffixIcon: Icon(Icons.warning),
           icon: Icon(Icons.add_alert_sharp)),
       onChanged: (value) {
-        setState(() {
-          _name = value;
-        });
+        if (value.length < 80) {
+          setState(() { 
+            _name = value;
+          });
+        } else {
+          value = _name;
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('¡Número de caracteres máximo!')));
+        }
       },
     );
   }

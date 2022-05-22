@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:telephony/telephony.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:geocode/geocode.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'menu_page.dart';
 
@@ -40,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                 child: MaterialButton(
                   color: Color(0xffff2d55),
                   shape: const CircleBorder(),
-                  onPressed: () => _sendSMS(),
+                  onPressed: () => _sendSMS(), //_location(),
                   child: const Padding(
                     padding: EdgeInsets.all(40),
                     child: Text(
@@ -74,15 +79,34 @@ class _HomePageState extends State<HomePage> {
   }
 
   _sendSMS() async {
-    List<String> list_numeros = ['+573146347090'];
+    var permission = await Permission.locationAlways.isGranted;
+    var permission_msg = await Permission.sms.isGranted;
+    if (!permission || !permission_msg) {
+      var t = await Permission.locationAlways.request();
+      var r = await Permission.sms.request();
+    }
+    // }else if(!permission_msg){
+    //   var r = await Permission.sms.request();
+    // }
+    print('entra1');
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    String lat_lng =
+        position.latitude.toString() + ',' + position.longitude.toString();
+    String msg =
+        '¡Ayuda! me encuentro en peligro, te comparto mi ubicación https://www.google.com/maps/search/?api=1&query=$lat_lng';
+    List<String> listNumeros = ['+573146347090'];
+    print('entra2');
     try {
-      for (var i = 0; i < list_numeros.length; i++) {
+      for (var i = 0; i < listNumeros.length; i++) {
         telephony.sendSms(
-          to: '${list_numeros[i]}',
-          message: '¡Ayuda! me encuentro en peligro, te comparto mi ubicación');
+            to: listNumeros[i],
+            message: msg,
+            isMultipart:
+                true); //'¡Ayuda! me encuentro en peligro, te comparto mi ubicación');
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')));
