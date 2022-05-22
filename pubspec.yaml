@@ -50,6 +50,7 @@ dependencies:
   geocode: ^1.0.1
   geolocator: ^8.2.1
   permission_handler: ^9.2.0  
+  flutter_contacts: ^1.1.4
   
 dev_dependencies:
   flutter_test:

@@ -1,87 +1,124 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_contacts/flutter_contacts.dart';
+import 'dart:typed_data';
 import '../../domain/models/human.dart';
 
 class Contacts extends StatefulWidget {
   Contacts({Key? key}) : super(key: key);
-
   @override
   _ContactsState createState() => _ContactsState();
 }
 
 class _ContactsState extends State<Contacts> {
-  int counter = 0;
-  List<Human> entries = <Human>[Human('Cristian Duran', '3025456458')];
+List<Contact> _suggestions = <Contact>[];
+  Set<Contact> _saved = <Contact>{};
+  List<Contact>? contacts;
+  @override
+  void initState() {
+    super.initState();
+    getContact();
+    _suggestions = <Contact>[];
+    _saved = <Contact>{};
+  }
 
-  void onPressed() {
-    setState(() {
-      entries.add(Human(
-          faker.person.name(),
-          (faker.randomGenerator
-                  .decimal(min: 3000000000, scale: 115654945)
-                  .floor())
-              .toString()));
-      counter = entries.length;
-    });
+  void getContact() async {
+    if (await FlutterContacts.requestPermission()) {
+      contacts = await FlutterContacts.getContacts(
+          withProperties: true, withPhoto: true);
+      print(contacts);
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contactos de Emergencia'),
-        backgroundColor: const Color(0xffff2d55),
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          return _row(entries[index], index);
+        appBar: AppBar(
+          title: const Text(
+            "Contactos de Emergencia",
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.list),
+              onPressed: _pushSaved,
+              tooltip: 'Contactos Seleccionados',
+            ),
+          ],
+        ),
+        body: (contacts) == null
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                padding: const EdgeInsets.all(10.0),
+                itemCount: contacts!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Uint8List? image = contacts![index].photo;
+                  String num = (contacts![index].phones.isNotEmpty)
+                      ? (contacts![index].phones.first.number)
+                      : "--";
+                  final alreadySaved = _saved.contains(contacts![index]);
+                  return ListTile(
+                      leading: (contacts![index].photo == null)
+                          ? const CircleAvatar(child: Icon(Icons.person))
+                          : CircleAvatar(backgroundImage: MemoryImage(image!)),
+                      title: Text(
+                          "${contacts![index].name.first} ${contacts![index].name.last}"),
+                      subtitle: Text(num),
+                      trailing: Icon(
+                        alreadySaved ? Icons.favorite : Icons.favorite_border,
+                        color: alreadySaved ? Colors.red : null,
+                        semanticLabel:
+                            alreadySaved ? 'Quitar Selección' : 'Seleccionar',
+                      ),
+                      onTap: () {
+                        if (contacts![index].phones.isNotEmpty) {
+                          setState(() {
+                            if (alreadySaved) {
+                              _saved.remove(contacts![index]);
+                            } else {
+                              _saved.add(contacts![index]);
+                            }
+                          });
+                        }
+                      });
+                },
+              ));
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          final tiles = _saved.map(
+            (contacts) {
+              String num = contacts.phones.first.number;
+              return ListTile(
+                /* title: Text(
+                  contacts.toString(),*/
+                leading: (contacts.photo == null)
+                    ? const CircleAvatar(child: Icon(Icons.person))
+                    : const CircleAvatar(child: Icon(Icons.person)),
+                title: Text("${contacts.name.first} ${contacts.name.last}"),
+                subtitle: Text(num),
+              );
+            },
+          );
+          final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(
+                  context: context,
+                  tiles: tiles,
+                ).toList()
+              : <Widget>[];
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Contactos Seleccionados'),
+            ),
+            body: ListView(children: divided),
+          );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => {onPressed()}),
-        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
-        tooltip: 'Añadir Contacto',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _row(Human human, int index) {
-    return Dismissible(
-        key: UniqueKey(),
-        background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerLeft,
-            child: const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                "Deleting",
-                style: TextStyle(color: Colors.white),
-              ),
-            )),
-        child: _card(human),
-        onDismissed: (direction) {
-          // Remove the item from the data source.
-          setState(() {
-            entries.remove(human);
-          });
-        });
-  }
-
-  Widget _card(Human human) {
-    return Card(
-      margin: const EdgeInsets.all(4.0),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(10.0),
-        leading: Icon(Icons.contacts),
-        title: Text(human.name),
-        subtitle: Text(human.email),
-        isThreeLine: true,
       ),
     );
   }
