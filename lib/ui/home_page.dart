@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:telephony/telephony.dart';
@@ -30,11 +34,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final Telephony telephony = Telephony.instance;
   late AnimationController _controller;
+  var latitude = 'latitud..'.obs;
+  var longitude = 'longitud..'.obs;
+  var _address = 'Sin internet';
+  late StreamSubscription<Position> streamSubscription;
 
   @override
   void initState() {
     super.initState();
     RunPermission();
+    getLocation();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -45,6 +54,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void changeLocation(address) {
+    setState(() {
+      _address = address;
+    });
   }
 
   Widget _button() {
@@ -109,8 +124,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       const Text('Su ubicación actual es:',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w600)),
-                      const Text('Uninorte, Barranquilla',
-                          style: TextStyle(fontSize: 20)),
+                      Text(_address, style: const TextStyle(fontSize: 20)),
                     ],
                   ))
             ],
@@ -151,13 +165,26 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  Future<void> connection(context) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('')));
+      }
+    } on SocketException catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sin acceso a internet.')));
+    }
+  }
+
   _sendSMS() async {
     var status = await Permission.location.status;
     if (!status.isGranted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Sin permisos de GPS, por favor activelo.'),
-                                      duration: Duration(seconds: 1))); 
-    await openAppSettings();
+          duration: Duration(seconds: 1)));
+      await openAppSettings();
     } else {
       //Aqui va el mensaje sacado de la base de datos
       String msg_help =
@@ -169,22 +196,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       String msg =
           '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
       print(msg);
-    List<String> listNumeros = ['+573146347090'];
-    // send message
-    bool val = true;
-    for (var i = 0; i < listNumeros.length; i++) {
-      telephony
-          .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
-          .catchError((err) {
-        val = false;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content:
-                  Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
-        );
-      });
+        List<String> listNumeros = ['+573146347090'];
+        // send message
+        bool val = true;
+        for (var i = 0; i < listNumeros.length; i++) {
+          telephony
+              .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
+              .catchError((err) {
+            val = false;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content:
+                      Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+            );
+          });
+        }
+        if(val) return ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     }
-    if(val) return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+  }
+
+  getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
     }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    streamSubscription =
+        Geolocator.getPositionStream().listen((Position position) {
+      latitude.value = 'Latitude : ${position.latitude}';
+      longitude.value = 'Longitude : ${position.longitude}';
+      getAddressFromLatLang(position);
+    });
+  }
+
+  Future<void> getAddressFromLatLang(Position position) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark place = placemark[0];
+    changeLocation(
+        '${place.street}, ${place.locality}, ${place.country}');
+    print(_address);
   }
 }
