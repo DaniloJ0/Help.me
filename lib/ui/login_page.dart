@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:apphelpme/ui/home_page.dart';
 import 'package:apphelpme/ui/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +15,7 @@ class _SignInPageState extends State<SignInPage> {
   final auth = FirebaseAuth.instance;
   String _email = '';
   String _password = '';
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,6 +1,6 @@
+import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:telephony/telephony.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    RunPermission();
     super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
@@ -150,14 +151,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _sendSMS() async {
-    var permission = await Permission.locationAlways.isGranted;
-    var permission_msg = await Permission.sms.isGranted;
-    if (!permission || !permission_msg) {
-      var t = await Permission.locationAlways.request();
-      var r = await Permission.sms.request();
-    }
     //Aqui va el mensaje sacado de la base de datos
-    String msg_help = '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
+    String msg_help =
+        '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     String lat_lng =
@@ -165,15 +161,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     String msg =
         '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
     List<String> listNumeros = ['+573146347090'];
-    try {
-      for (var i = 0; i < listNumeros.length; i++) {
-        telephony.sendSms(to: listNumeros[i], message: msg, isMultipart: true);
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Mensajes enviados a tus contactos')));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')), );
+    //send message
+    // try {
+    bool val = true;
+    for (var i = 0; i < listNumeros.length; i++) {
+      telephony
+          .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
+          .catchError((err) {
+        val = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content:
+                  Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+        );
+      });
     }
+    if(val) return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mensajes enviados a tus contactos')));
   }
 }

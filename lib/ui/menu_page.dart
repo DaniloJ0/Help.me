@@ -21,7 +21,6 @@ class MenuPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Column(children: [
-        // customAppBar(),
         Container(
           height: 125.0,
           child: headBar(),

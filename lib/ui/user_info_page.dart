@@ -44,8 +44,8 @@ class _UserInforState extends State<UserInfor> {
   Widget circleAvatar() {
     return Container(
         alignment: Alignment.center,
-        width: 90.0,
-        height: 90.0,
+        width: 100.0,
+        height: 100.0,
         child: CircleAvatar(
             radius: 70,
             backgroundColor: Colors.white,
@@ -143,11 +143,11 @@ class _UserInforState extends State<UserInfor> {
           backgroundColor: Colors.transparent,
           builder: (context) => Container(
             height: MediaQuery.of(context).size.height * 0.22,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(25.0),
-                topRight: const Radius.circular(25.0),
+                topLeft:  Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
               ),
             ),
             child: Center(
@@ -158,7 +158,7 @@ class _UserInforState extends State<UserInfor> {
                     child: avatars(1, 2, 3),
                   ),
                   Padding(
-                     padding: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
                     child: avatars(4, 5, 6),
                   ),
                 ],
@@ -170,7 +170,7 @@ class _UserInforState extends State<UserInfor> {
       child: const Icon(
         Icons.camera_alt,
         color: Colors.red,
-        size: 18.0,
+        size: 28.0,
       ),
     );
   }
@@ -183,40 +183,25 @@ class _UserInforState extends State<UserInfor> {
           radius: 30,
           backgroundColor: Colors.white,
           backgroundImage: AssetImage("lib/assets/u$id1.png"),
-        ),
-        avatarPositioned(id1),
+          child: onClickAvatar(id1)),
         CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
           backgroundImage: AssetImage("lib/assets/u$id2.png"),
-        ),
-        avatarPositioned(id2),
+          child: onClickAvatar(id2)),
+        
         CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
           backgroundImage: AssetImage("lib/assets/u$id3.png"),
-        ),
-        avatarPositioned(id3),
+          child: onClickAvatar(id3)),
       ],
     );
   }
 
-  Widget avatarPositioned(id){
-    return Positioned(
-            bottom: 20,
-            right: 5,
-            child: InkWell(
-              onTap: () {
-                changeavatar(id, "lib/assets/u$id.png");
-              },
-              child: const Icon(
-                Icons.check,
-                color: Colors.red,
-                size: 18.0,
-              ),
-            ));
+  Widget onClickAvatar(id) {
+    return InkWell(onTap: () {
+      changeavatar(id, "lib/assets/u$id.png");
+    });
   }
-
-  
 }
-
