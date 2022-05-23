@@ -1,6 +1,7 @@
 import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:telephony/telephony.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -32,8 +33,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    RunPermission();
     super.initState();
+    RunPermission();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -151,18 +152,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   _sendSMS() async {
-    //Aqui va el mensaje sacado de la base de datos
-    String msg_help =
-        '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    String lat_lng =
-        position.latitude.toString() + ',' + position.longitude.toString();
-    String msg =
-        '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
+    var status = await Permission.location.status;
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Sin permisos de GPS, por favor activelo.'),
+                                      duration: Duration(seconds: 1))); 
+    await openAppSettings();
+    } else {
+      //Aqui va el mensaje sacado de la base de datos
+      String msg_help =
+          '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String lat_lng =
+          position.latitude.toString() + ',' + position.longitude.toString();
+      String msg =
+          '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
+      print(msg);
     List<String> listNumeros = ['+573146347090'];
-    //send message
-    // try {
+    // send message
     bool val = true;
     for (var i = 0; i < listNumeros.length; i++) {
       telephony
@@ -177,5 +185,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       });
     }
     if(val) return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+    }
   }
 }
