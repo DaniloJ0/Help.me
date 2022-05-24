@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:vibration/vibration.dart';
 import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -121,10 +121,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           'Presione el botón para\n         pedir ayuda\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700)),
-                      const Text('Su ubicación actual es:',
+                    const Text('Su ubicación actual es:\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w600)),
-                      Text(_address, style: const TextStyle(fontSize: 20)),
+                      Text(_address, style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
                     ],
                   ))
             ],
@@ -187,6 +187,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       await openAppSettings();
     } else {
       //Aqui va el mensaje sacado de la base de datos
+      Vibration.vibrate(duration: 1000);
       String msg_help =
           '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
       Position position = await Geolocator.getCurrentPosition(
@@ -197,22 +198,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
       print(msg);
         List<String> listNumeros = ['+573146347090'];
-        // send message
-        bool val = true;
-        for (var i = 0; i < listNumeros.length; i++) {
-          telephony
-              .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
-              .catchError((err) {
-            val = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content:
-                      Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
-            );
-          });
-        }
-        if(val) return ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+        // // send message
+        // bool val = true;
+        // for (var i = 0; i < listNumeros.length; i++) {
+        //   telephony
+        //       .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
+        //       .catchError((err) {
+        //     val = false;
+        //     ScaffoldMessenger.of(context).showSnackBar(
+        //       const SnackBar(
+        //           content:
+        //               Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+        //     );
+        //   });
+        // }
+        // if(val) return ScaffoldMessenger.of(context).showSnackBar(
+        //       const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     }
   }
 
@@ -248,7 +249,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemark[0];
     changeLocation(
-        '${place.street}, ${place.locality}, ${place.country}');
+        '${place.street} \n${place.locality}, ${place.country}');
     print(_address);
   }
 }

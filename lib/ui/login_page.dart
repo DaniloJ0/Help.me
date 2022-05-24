@@ -20,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: const Text('Help.Me'),
           backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
         ),
@@ -31,14 +31,14 @@ class _SignInPageState extends State<SignInPage> {
             Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('lib/assets/image1.png'),
+                      image: AssetImage('lib/assets/loginImage.jpeg'),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter)),
             ),
             //Layout blanco
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 190),
+              margin: EdgeInsets.only(top: 305),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,

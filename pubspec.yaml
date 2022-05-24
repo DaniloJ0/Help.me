@@ -52,6 +52,7 @@ dependencies:
   permission_handler: ^9.2.0  
   flutter_contacts: ^1.1.4
   geocoding: ^2.0.4
+  vibration: ^1.7.4-nullsafety.0
   
 dev_dependencies:
   flutter_test:
