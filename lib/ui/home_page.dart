@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +39,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var longitude = 'longitud..'.obs;
   var _address = 'Sin internet';
   late StreamSubscription<Position> streamSubscription;
+  List<String> contactsNums = [];
+
+  late SharedPreferences prefs;
+
+  _initializeContacts() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      contactsNums = prefs.getStringList('nums') ?? [];
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     RunPermission();
+    _initializeContacts();
     getLocation();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
@@ -121,10 +133,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           'Presione el botón para\n         pedir ayuda\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700)),
-                    const Text('Su ubicación actual es:\n',
+                      const Text('Su ubicación actual es:\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w600)),
-                      Text(_address, style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
+                      Text(_address,
+                          style: const TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center),
                     ],
                   ))
             ],
@@ -197,23 +211,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       String msg =
           '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
       print(msg);
-        List<String> listNumeros = ['+573146347090'];
-        // send message
-        bool val = true;
-        for (var i = 0; i < listNumeros.length; i++) {
-          telephony
-              .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
-              .catchError((err) {
-            val = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content:
-                      Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
-            );
-          });
-        }
-        if(val) return ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+      // List<String> listNumeros = ['+573146347090'];
+      // send message
+      bool val = true;
+      for (var i = 0; i < contactsNums.length; i++) {
+        telephony
+            .sendSms(to: contactsNums[i], message: msg, isMultipart: true)
+            .catchError((err) {
+          val = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content:
+                    Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+          );
+        });
+      }
+      if (val)
+        return ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     }
   }
 
@@ -248,8 +263,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemark[0];
-    changeLocation(
-        '${place.street} \n${place.locality}, ${place.country}');
+    changeLocation('${place.street} \n${place.locality}, ${place.country}');
     print(_address);
   }
 }
