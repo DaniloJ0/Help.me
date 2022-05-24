@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Message extends StatefulWidget {
   Message({Key? key}) : super(key: key);
@@ -9,18 +10,37 @@ class Message extends StatefulWidget {
 }
 
 class _MessageState extends State<Message> {
-  String _name = '';
+  late String _name = '';
   final msgHolder = TextEditingController();
 
-  void funcion(int saveorclear) {
+  late SharedPreferences prefs;
+
+  _initMsg() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _name = prefs.getString('msg') ?? 'Ayuda! Estoy en peligro!';
+    });
+  }
+
+  @override
+  void initState() {
+    _initMsg();
+    super.initState();
+  }
+
+  void funcion(int saveorclear, String value) async {
     if (saveorclear == 1) {
-      //Guardar el mensaje
+      setState(() {
+        _name = value;
+      });
+      await prefs.setString('msg', _name);
     } else {
       if (saveorclear == 2) {
         setState(() {
           _name = 'Ayudame! Estoy en peligro!';
           msgHolder.clear();
         });
+        await prefs.setString('msg', _name);
       }
     }
   }
@@ -46,12 +66,13 @@ class _MessageState extends State<Message> {
                 Expanded(
                   child: Container(
                       alignment: Alignment.center,
-                      child: _createButton("Guardar", 1)),
+                      child: _createButton("Guardar", 1, _name)),
                 ),
                 Expanded(
                   child: Container(
                       alignment: Alignment.center,
-                      child: _createButton("Reestablecer", 2)),
+                      child: _createButton(
+                          "Reestablecer", 2, 'Ayudame! Estoy en peligro!')),
                 ),
                 //Mensaje actual
               ]),
@@ -85,9 +106,10 @@ class _MessageState extends State<Message> {
           icon: Icon(Icons.add_alert_sharp)),
       onChanged: (value) {
         if (value.length < 80) {
-          setState(() { 
+          setState(() {
             _name = value;
           });
+          funcion(1, value);
         } else {
           value = _name;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +119,7 @@ class _MessageState extends State<Message> {
     );
   }
 
-  Widget _createButton(String text, int op) {
+  Widget _createButton(String text, int op, String texto) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.red),
       child: Padding(
@@ -109,7 +131,7 @@ class _MessageState extends State<Message> {
           ),
         ),
       ),
-      onPressed: () => funcion(op),
+      onPressed: () => funcion(op, texto),
     );
   }
 }

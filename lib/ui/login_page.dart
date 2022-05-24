@@ -20,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Help.Me'),
+          title: const Text('Help.me'),
           backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
         ),
