@@ -198,22 +198,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
       print(msg);
         List<String> listNumeros = ['+573146347090'];
-        // // send message
-        // bool val = true;
-        // for (var i = 0; i < listNumeros.length; i++) {
-        //   telephony
-        //       .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
-        //       .catchError((err) {
-        //     val = false;
-        //     ScaffoldMessenger.of(context).showSnackBar(
-        //       const SnackBar(
-        //           content:
-        //               Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
-        //     );
-        //   });
-        // }
-        // if(val) return ScaffoldMessenger.of(context).showSnackBar(
-        //       const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+        // send message
+        bool val = true;
+        for (var i = 0; i < listNumeros.length; i++) {
+          telephony
+              .sendSms(to: listNumeros[i], message: msg, isMultipart: true)
+              .catchError((err) {
+            val = false;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content:
+                      Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+            );
+          });
+        }
+        if(val) return ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Mensajes enviados a tus contactos')));
     }
   }
 
