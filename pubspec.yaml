@@ -53,6 +53,8 @@ dependencies:
   flutter_contacts: ^1.1.4
   geocoding: ^2.0.4
   vibration: ^1.7.4-nullsafety.0
+  shared_preferences: ^2.0.15
+  fluttercontactpicker: ^4.7.0
   
 dev_dependencies:
   flutter_test:
