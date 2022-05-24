@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:apphelpme/ui/home_page.dart';
 import 'package:apphelpme/ui/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,12 +15,12 @@ class _SignInPageState extends State<SignInPage> {
   final auth = FirebaseAuth.instance;
   String _email = '';
   String _password = '';
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: const Text('Help.me'),
           backgroundColor: const Color(0xffff2d55),
           centerTitle: true,
         ),
@@ -32,14 +31,14 @@ class _SignInPageState extends State<SignInPage> {
             Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('lib/assets/image1.png'),
+                      image: AssetImage('lib/assets/loginImage.jpeg'),
                       fit: BoxFit.fitWidth,
                       alignment: Alignment.topCenter)),
             ),
             //Layout blanco
             Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(top: 190),
+              margin: EdgeInsets.only(top: 305),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
@@ -107,18 +106,18 @@ class _SignInPageState extends State<SignInPage> {
                             if (user != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text(
-                                          'Acceso exitoso.'), duration: Duration(seconds: 1)));
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return HomePage(
-                                  onPressed: () {},
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('x'),
+                                      content: Text('Acceso exitoso.'),
+                                      duration: Duration(seconds: 1)));
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(
+                                      onPressed: () {},
+                                      child: ElevatedButton(
+                                          onPressed: () {},
+                                          child: const Text('x')),
+                                    ),
                                   ),
-                                );
-                              }));
+                                  (route) => false);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

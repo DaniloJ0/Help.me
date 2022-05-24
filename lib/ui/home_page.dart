@@ -1,4 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
+import 'package:apphelpme/permission/init_permission.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:telephony/telephony.dart';
@@ -29,10 +35,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final Telephony telephony = Telephony.instance;
   late AnimationController _controller;
+  var latitude = 'latitud..'.obs;
+  var longitude = 'longitud..'.obs;
+  var _address = 'Sin internet';
+  late StreamSubscription<Position> streamSubscription;
+  List<String> contactsNums = [];
+
+  late SharedPreferences prefs;
+
+  _initializeContacts() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      contactsNums = prefs.getStringList('nums') ?? [];
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    RunPermission();
+    _initializeContacts();
+    getLocation();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -43,6 +66,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void changeLocation(address) {
+    setState(() {
+      _address = address;
+    });
   }
 
   Widget _button() {
@@ -104,11 +133,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           'Presione el botón para\n         pedir ayuda\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w700)),
-                      const Text('Su ubicación actual es:',
+                      const Text('Su ubicación actual es:\n',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w600)),
-                      const Text('Uninorte, Barranquilla',
-                          style: TextStyle(fontSize: 20)),
+                      Text(_address,
+                          style: const TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center),
                     ],
                   ))
             ],
@@ -149,31 +179,91 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  _sendSMS() async {
-    var permission = await Permission.locationAlways.isGranted;
-    var permission_msg = await Permission.sms.isGranted;
-    if (!permission || !permission_msg) {
-      var t = await Permission.locationAlways.request();
-      var r = await Permission.sms.request();
-    }
-    //Aqui va el mensaje sacado de la base de datos
-    String msg_help = '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    String lat_lng =
-        position.latitude.toString() + ',' + position.longitude.toString();
-    String msg =
-        '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
-    List<String> listNumeros = ['+573146347090'];
+  Future<void> connection(context) async {
     try {
-      for (var i = 0; i < listNumeros.length; i++) {
-        telephony.sendSms(to: listNumeros[i], message: msg, isMultipart: true);
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('')));
       }
+    } on SocketException catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Mensajes enviados a tus contactos')));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('¡Opp! Ocurrió un error, puede que no tengas saldo')), );
+          const SnackBar(content: Text('Sin acceso a internet.')));
     }
+  }
+
+  _sendSMS() async {
+    var status = await Permission.location.status;
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Sin permisos de GPS, por favor activelo.'),
+          duration: Duration(seconds: 1)));
+      await openAppSettings();
+    } else {
+      //Aqui va el mensaje sacado de la base de datos
+      Vibration.vibrate(duration: 1000);
+      String msg_help =
+          '¡Ayuda! me encuentro en peligro, te comparto mi ubicación';
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      String lat_lng =
+          position.latitude.toString() + ',' + position.longitude.toString();
+      String msg =
+          '$msg_help https://www.google.com/maps/search/?api=1&query=$lat_lng';
+      print(msg);
+      // List<String> listNumeros = ['+573146347090'];
+      // send message
+      bool val = true;
+      for (var i = 0; i < contactsNums.length; i++) {
+        telephony
+            .sendSms(to: contactsNums[i], message: msg, isMultipart: true)
+            .catchError((err) {
+          val = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content:
+                    Text('¡Opp! Ocurrió un error, puede que no tengas saldo')),
+          );
+        });
+      }
+      if (val)
+        return ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Mensajes enviados a tus contactos')));
+    }
+  }
+
+  getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    streamSubscription =
+        Geolocator.getPositionStream().listen((Position position) {
+      latitude.value = 'Latitude : ${position.latitude}';
+      longitude.value = 'Longitude : ${position.longitude}';
+      getAddressFromLatLang(position);
+    });
+  }
+
+  Future<void> getAddressFromLatLang(Position position) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark place = placemark[0];
+    changeLocation('${place.street} \n${place.locality}, ${place.country}');
+    print(_address);
   }
 }

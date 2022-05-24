@@ -1,87 +1,82 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../domain/models/human.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Contacts extends StatefulWidget {
-  Contacts({Key? key}) : super(key: key);
-
   @override
   _ContactsState createState() => _ContactsState();
 }
 
 class _ContactsState extends State<Contacts> {
-  int counter = 0;
-  List<Human> entries = <Human>[Human('Cristian Duran', '3025456458')];
+  List<String> contactsNums = [];
+  List<String> contactsNames = [];
 
-  void onPressed() {
+  late SharedPreferences prefs;
+
+  _initializeContacts() async {
+    prefs = await SharedPreferences.getInstance();
     setState(() {
-      entries.add(Human(
-          faker.person.name(),
-          (faker.randomGenerator
-                  .decimal(min: 3000000000, scale: 115654945)
-                  .floor())
-              .toString()));
-      counter = entries.length;
+      contactsNums = prefs.getStringList('nums') ?? [];
+      contactsNames = prefs.getStringList('names') ?? [];
     });
+  }
+
+  @override
+  void initState() {
+    _initializeContacts();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Contactos de Emergencia'),
-        backgroundColor: const Color(0xffff2d55),
-        centerTitle: true,
+        title: Text("Contactos de Emergencia"),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          return _row(entries[index], index);
-        },
-      ),
+      body: contactsNames.length > 0
+          ? ListView.builder(
+              itemCount: contactsNames.length,
+              itemBuilder: (BuildContext ctx, int i) {
+                return Card(
+                  margin: EdgeInsets.all(5),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.account_circle,
+                      size: 35,
+                    ),
+                    title: Text(contactsNames[i]),
+                    subtitle: Text(contactsNums[i]),
+                    trailing: GestureDetector(
+                      child: Icon(Icons.delete),
+                      onTap: () async {
+                        setState(() {
+                          contactsNames.removeAt(i);
+                          contactsNums.removeAt(i);
+                        });
+                        await prefs.setStringList('nums', contactsNums);
+                        await prefs.setStringList('names', contactsNames);
+                      },
+                    ),
+                  ),
+                );
+              },
+            )
+          : Center(
+              child: Text('Aún no has seleccionado contactos'),
+            ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => {onPressed()}),
-        backgroundColor: const Color.fromARGB(255, 245, 10, 10),
-        tooltip: 'Añadir Contacto',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _row(Human human, int index) {
-    return Dismissible(
-        key: UniqueKey(),
-        background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerLeft,
-            child: const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                "Deleting",
-                style: TextStyle(color: Colors.white),
-              ),
-            )),
-        child: _card(human),
-        onDismissed: (direction) {
-          // Remove the item from the data source.
+        child: Icon(Icons.add),
+        onPressed: () async {
+          final PhoneContact contact =
+              await FlutterContactPicker.pickPhoneContact();
           setState(() {
-            entries.remove(human);
+            contactsNames.add(contact.fullName.toString());
+            contactsNums.add(contact.phoneNumber!.number.toString());
           });
-        });
-  }
-
-  Widget _card(Human human) {
-    return Card(
-      margin: const EdgeInsets.all(4.0),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(10.0),
-        leading: Icon(Icons.contacts),
-        title: Text(human.name),
-        subtitle: Text(human.email),
-        isThreeLine: true,
+          await prefs.setStringList('nums', contactsNums);
+          await prefs.setStringList('names', contactsNames);
+        },
       ),
     );
   }
