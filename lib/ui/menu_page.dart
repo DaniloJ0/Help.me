@@ -1,4 +1,5 @@
 import 'package:apphelpme/ui/login_page.dart';
+import 'package:apphelpme/ui/tipsPage.dart';
 import 'package:apphelpme/ui/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,6 +79,12 @@ class MenuPage extends StatelessWidget {
             onTap: () => Get.to(() => TermsPage(),
                 transition: Transition.leftToRight,
                 duration: const Duration(milliseconds: 450))),
+                ListTile(
+            leading: icons('help'),
+            title: textos('Tips', 17.0, FontWeight.w500),
+            subtitle: textos('Defensa personal, consejos al salir sola', 14.0,
+                FontWeight.w400),
+            onTap: () => Get.to(() => TipPage())),
         ListTile(
             leading: icons('ayuda'),
             title: textos('Ayuda', 17.0, FontWeight.w500),
