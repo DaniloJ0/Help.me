@@ -1,6 +1,6 @@
 # Help.me
 
-Help.me es un proyecto que proporciona al usuario un opción que permita mandar un mensaje de alerta cunado se encuentre en peligro.
+Help.me es una aplicación móvil que funciona como botón de pánico para uso en situaciones de peligro, que proporciona al usuario un opción para enviar un mensaje de alerta cuando sienta que se encuentra en riesgo.
 
 ## Demo video
 ### Youtube: https://youtu.be/_x47_yF1cpI
