@@ -2,17 +2,19 @@
 
 Help.me es un proyecto que proporciona al usuario un opción que permita mandar un mensaje de alerta cunado se encuentre en peligro.
 
+## Demo video
+### Youtube: https://youtu.be/_x47_yF1cpI
+
+Demo de la aplicación de botón de pánico Help.me, que cuenta con envio de mensajes de texto a los contactos seleccionados, uso de ubicación en tiempo real, videos de defensa personal a través de YouTube, facilidad de uso y capacidades de personalización.
+
+
 ## Para ejecutar, escriba el siguiente comando en la terminal:
+
 ```
 flutter run
 ```
 
 ## Links de los talleres
-
-## Demo video
-### Youtube: https://youtu.be/_x47_yF1cpI
-
-Demo de la aplicación de botón de pánico Help.me, que cuenta con envio de mensajes de texto a los contactos seleccionados, uso de ubicación en tiempo real, videos de defensa personal a través de YouTube, facilidad de uso y capacidades de personalización.
 
 # * Danilo Jimenez Rangel 
 
